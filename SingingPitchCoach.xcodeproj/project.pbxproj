@@ -1,0 +1,491 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B0C9A201872C46E00CDFF58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */; };
+		2B0C9A221872C46E00CDFF58 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A211872C46E00CDFF58 /* CoreGraphics.framework */; };
+		2B0C9A241872C46E00CDFF58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A231872C46E00CDFF58 /* UIKit.framework */; };
+		2B0C9A261872C46E00CDFF58 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A251872C46E00CDFF58 /* SpriteKit.framework */; };
+		2B0C9A2C1872C46E00CDFF58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A2A1872C46E00CDFF58 /* InfoPlist.strings */; };
+		2B0C9A2E1872C46E00CDFF58 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A2D1872C46E00CDFF58 /* main.m */; };
+		2B0C9A321872C46E00CDFF58 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A311872C46E00CDFF58 /* AppDelegate.m */; };
+		2B0C9A351872C46E00CDFF58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A331872C46E00CDFF58 /* Main.storyboard */; };
+		2B0C9A381872C46E00CDFF58 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A371872C46E00CDFF58 /* ViewController.m */; };
+		2B0C9A3B1872C46E00CDFF58 /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3A1872C46E00CDFF58 /* MyScene.m */; };
+		2B0C9A3D1872C46E00CDFF58 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */; };
+		2B0C9A3F1872C46E00CDFF58 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */; };
+		2B0C9A461872C46E00CDFF58 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A451872C46E00CDFF58 /* XCTest.framework */; };
+		2B0C9A471872C46E00CDFF58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */; };
+		2B0C9A481872C46E00CDFF58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A231872C46E00CDFF58 /* UIKit.framework */; };
+		2B0C9A501872C46E00CDFF58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A4E1872C46E00CDFF58 /* InfoPlist.strings */; };
+		2B0C9A521872C46E00CDFF58 /* SingingPitchCoachTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A511872C46E00CDFF58 /* SingingPitchCoachTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2B0C9A491872C46E00CDFF58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B0C9A141872C46E00CDFF58 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B0C9A1B1872C46E00CDFF58;
+			remoteInfo = SingingPitchCoach;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2B0C9A1C1872C46E00CDFF58 /* SingingPitchCoach.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SingingPitchCoach.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2B0C9A211872C46E00CDFF58 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2B0C9A231872C46E00CDFF58 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2B0C9A251872C46E00CDFF58 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		2B0C9A291872C46E00CDFF58 /* SingingPitchCoach-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SingingPitchCoach-Info.plist"; sourceTree = "<group>"; };
+		2B0C9A2B1872C46E00CDFF58 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2B0C9A2D1872C46E00CDFF58 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2B0C9A2F1872C46E00CDFF58 /* SingingPitchCoach-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SingingPitchCoach-Prefix.pch"; sourceTree = "<group>"; };
+		2B0C9A301872C46E00CDFF58 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		2B0C9A311872C46E00CDFF58 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2B0C9A341872C46E00CDFF58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2B0C9A361872C46E00CDFF58 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		2B0C9A371872C46E00CDFF58 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		2B0C9A391872C46E00CDFF58 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
+		2B0C9A3A1872C46E00CDFF58 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
+		2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2B0C9A441872C46E00CDFF58 /* SingingPitchCoachTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SingingPitchCoachTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B0C9A451872C46E00CDFF58 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		2B0C9A4D1872C46E00CDFF58 /* SingingPitchCoachTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SingingPitchCoachTests-Info.plist"; sourceTree = "<group>"; };
+		2B0C9A4F1872C46E00CDFF58 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2B0C9A511872C46E00CDFF58 /* SingingPitchCoachTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingingPitchCoachTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2B0C9A191872C46E00CDFF58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A221872C46E00CDFF58 /* CoreGraphics.framework in Frameworks */,
+				2B0C9A241872C46E00CDFF58 /* UIKit.framework in Frameworks */,
+				2B0C9A261872C46E00CDFF58 /* SpriteKit.framework in Frameworks */,
+				2B0C9A201872C46E00CDFF58 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B0C9A411872C46E00CDFF58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A461872C46E00CDFF58 /* XCTest.framework in Frameworks */,
+				2B0C9A481872C46E00CDFF58 /* UIKit.framework in Frameworks */,
+				2B0C9A471872C46E00CDFF58 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B0C9A131872C46E00CDFF58 = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A271872C46E00CDFF58 /* SingingPitchCoach */,
+				2B0C9A4B1872C46E00CDFF58 /* SingingPitchCoachTests */,
+				2B0C9A1E1872C46E00CDFF58 /* Frameworks */,
+				2B0C9A1D1872C46E00CDFF58 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2B0C9A1D1872C46E00CDFF58 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A1C1872C46E00CDFF58 /* SingingPitchCoach.app */,
+				2B0C9A441872C46E00CDFF58 /* SingingPitchCoachTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2B0C9A1E1872C46E00CDFF58 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */,
+				2B0C9A211872C46E00CDFF58 /* CoreGraphics.framework */,
+				2B0C9A231872C46E00CDFF58 /* UIKit.framework */,
+				2B0C9A251872C46E00CDFF58 /* SpriteKit.framework */,
+				2B0C9A451872C46E00CDFF58 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2B0C9A271872C46E00CDFF58 /* SingingPitchCoach */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A301872C46E00CDFF58 /* AppDelegate.h */,
+				2B0C9A311872C46E00CDFF58 /* AppDelegate.m */,
+				2B0C9A331872C46E00CDFF58 /* Main.storyboard */,
+				2B0C9A361872C46E00CDFF58 /* ViewController.h */,
+				2B0C9A371872C46E00CDFF58 /* ViewController.m */,
+				2B0C9A391872C46E00CDFF58 /* MyScene.h */,
+				2B0C9A3A1872C46E00CDFF58 /* MyScene.m */,
+				2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */,
+				2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */,
+				2B0C9A281872C46E00CDFF58 /* Supporting Files */,
+			);
+			path = SingingPitchCoach;
+			sourceTree = "<group>";
+		};
+		2B0C9A281872C46E00CDFF58 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A291872C46E00CDFF58 /* SingingPitchCoach-Info.plist */,
+				2B0C9A2A1872C46E00CDFF58 /* InfoPlist.strings */,
+				2B0C9A2D1872C46E00CDFF58 /* main.m */,
+				2B0C9A2F1872C46E00CDFF58 /* SingingPitchCoach-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2B0C9A4B1872C46E00CDFF58 /* SingingPitchCoachTests */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A511872C46E00CDFF58 /* SingingPitchCoachTests.m */,
+				2B0C9A4C1872C46E00CDFF58 /* Supporting Files */,
+			);
+			path = SingingPitchCoachTests;
+			sourceTree = "<group>";
+		};
+		2B0C9A4C1872C46E00CDFF58 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A4D1872C46E00CDFF58 /* SingingPitchCoachTests-Info.plist */,
+				2B0C9A4E1872C46E00CDFF58 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B0C9A1B1872C46E00CDFF58 /* SingingPitchCoach */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B0C9A551872C46E00CDFF58 /* Build configuration list for PBXNativeTarget "SingingPitchCoach" */;
+			buildPhases = (
+				2B0C9A181872C46E00CDFF58 /* Sources */,
+				2B0C9A191872C46E00CDFF58 /* Frameworks */,
+				2B0C9A1A1872C46E00CDFF58 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SingingPitchCoach;
+			productName = SingingPitchCoach;
+			productReference = 2B0C9A1C1872C46E00CDFF58 /* SingingPitchCoach.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2B0C9A431872C46E00CDFF58 /* SingingPitchCoachTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B0C9A581872C46E00CDFF58 /* Build configuration list for PBXNativeTarget "SingingPitchCoachTests" */;
+			buildPhases = (
+				2B0C9A401872C46E00CDFF58 /* Sources */,
+				2B0C9A411872C46E00CDFF58 /* Frameworks */,
+				2B0C9A421872C46E00CDFF58 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B0C9A4A1872C46E00CDFF58 /* PBXTargetDependency */,
+			);
+			name = SingingPitchCoachTests;
+			productName = SingingPitchCoachTests;
+			productReference = 2B0C9A441872C46E00CDFF58 /* SingingPitchCoachTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2B0C9A141872C46E00CDFF58 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = Edward;
+				TargetAttributes = {
+					2B0C9A431872C46E00CDFF58 = {
+						TestTargetID = 2B0C9A1B1872C46E00CDFF58;
+					};
+				};
+			};
+			buildConfigurationList = 2B0C9A171872C46E00CDFF58 /* Build configuration list for PBXProject "SingingPitchCoach" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2B0C9A131872C46E00CDFF58;
+			productRefGroup = 2B0C9A1D1872C46E00CDFF58 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2B0C9A1B1872C46E00CDFF58 /* SingingPitchCoach */,
+				2B0C9A431872C46E00CDFF58 /* SingingPitchCoachTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2B0C9A1A1872C46E00CDFF58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A2C1872C46E00CDFF58 /* InfoPlist.strings in Resources */,
+				2B0C9A3F1872C46E00CDFF58 /* Images.xcassets in Resources */,
+				2B0C9A3D1872C46E00CDFF58 /* Spaceship.png in Resources */,
+				2B0C9A351872C46E00CDFF58 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B0C9A421872C46E00CDFF58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A501872C46E00CDFF58 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2B0C9A181872C46E00CDFF58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A3B1872C46E00CDFF58 /* MyScene.m in Sources */,
+				2B0C9A381872C46E00CDFF58 /* ViewController.m in Sources */,
+				2B0C9A321872C46E00CDFF58 /* AppDelegate.m in Sources */,
+				2B0C9A2E1872C46E00CDFF58 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B0C9A401872C46E00CDFF58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0C9A521872C46E00CDFF58 /* SingingPitchCoachTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B0C9A4A1872C46E00CDFF58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B0C9A1B1872C46E00CDFF58 /* SingingPitchCoach */;
+			targetProxy = 2B0C9A491872C46E00CDFF58 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2B0C9A2A1872C46E00CDFF58 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B0C9A2B1872C46E00CDFF58 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2B0C9A331872C46E00CDFF58 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B0C9A341872C46E00CDFF58 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2B0C9A4E1872C46E00CDFF58 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B0C9A4F1872C46E00CDFF58 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2B0C9A531872C46E00CDFF58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2B0C9A541872C46E00CDFF58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2B0C9A561872C46E00CDFF58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
+				INFOPLIST_FILE = "SingingPitchCoach/SingingPitchCoach-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		2B0C9A571872C46E00CDFF58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
+				INFOPLIST_FILE = "SingingPitchCoach/SingingPitchCoach-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		2B0C9A591872C46E00CDFF58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SingingPitchCoach.app/SingingPitchCoach";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "SingingPitchCoachTests/SingingPitchCoachTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		2B0C9A5A1872C46E00CDFF58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SingingPitchCoach.app/SingingPitchCoach";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
+				INFOPLIST_FILE = "SingingPitchCoachTests/SingingPitchCoachTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2B0C9A171872C46E00CDFF58 /* Build configuration list for PBXProject "SingingPitchCoach" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0C9A531872C46E00CDFF58 /* Debug */,
+				2B0C9A541872C46E00CDFF58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B0C9A551872C46E00CDFF58 /* Build configuration list for PBXNativeTarget "SingingPitchCoach" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0C9A561872C46E00CDFF58 /* Debug */,
+				2B0C9A571872C46E00CDFF58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2B0C9A581872C46E00CDFF58 /* Build configuration list for PBXNativeTarget "SingingPitchCoachTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0C9A591872C46E00CDFF58 /* Debug */,
+				2B0C9A5A1872C46E00CDFF58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2B0C9A141872C46E00CDFF58 /* Project object */;
+}
