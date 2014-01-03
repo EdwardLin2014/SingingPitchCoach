@@ -54,9 +54,8 @@
     sampleRate=44100;                 // Fix this sample rate, as Human Pitch Range A0(27.5Hz) to B8(7900Hz)
     
     percentageOfOverlap = [userDefaults integerForKey:@"percentageOfOverlap"];        // % of frame overlap
-//    percentageOfOverlap = 25;
-//    kBufferSize = [userDefaults integerForKey:@"kBufferSize"];
-//    if (kBufferSize == 0)
+    kBufferSize = [userDefaults integerForKey:@"kBufferSize"];
+    if (kBufferSize == 0)
         kBufferSize = 8192;
     
     [session setPreferredSampleRate:sampleRate error:&err];
@@ -104,6 +103,8 @@
 {
     maxFrames = kBufferSize * 2;                        // Base MUST be 2!
     
+    if (dataBuffer) free(dataBuffer);
+    if (outputBuffer) free(outputBuffer);
 	dataBuffer = (void*)malloc(maxFrames * sizeof(SInt16));
 	outputBuffer = (float*)malloc(maxFrames *sizeof(float));
     
@@ -113,6 +114,11 @@
 	nOver2 = maxFrames/2;
 	bufferCapacity = maxFrames;
 	index = 0;
+    
+    if (FFT.realp) free(FFT.realp);
+    if (FFT.imagp) free(FFT.imagp);
+    if (Cepstrum.realp) free(Cepstrum.realp);
+    if (Cepstrum.imagp) free(Cepstrum.imagp);
 	FFT.realp = (float *)malloc(nOver2 * sizeof(float));
 	FFT.imagp = (float *)malloc(nOver2 * sizeof(float));
     Cepstrum.realp = (float *)malloc(nOver2 * sizeof(float));
@@ -507,6 +513,7 @@ void ConvertInt16ToFloat(PitchDetector* THIS, void *buf, float *outputBuf, size_
     NSLog (@"  nOver2:                 %d",   nOver2);
     NSLog (@"  sampleRate:             %f",   sampleRate);
     NSLog (@"  percentageOfOverlap:    %d",   percentageOfOverlap);
+    NSLog (@"  kBufferSize:            %d",   kBufferSize);
 }
 - (void)printASBD:(AudioStreamBasicDescription)asbd
 {

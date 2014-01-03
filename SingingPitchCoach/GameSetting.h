@@ -8,13 +8,24 @@
 
 #import <SpriteKit/SpriteKit.h>
 
+@class PitchDetector;
+
 @interface GameSetting : SKScene
 {
     NSUserDefaults *userDefaults;
     
     UILabel *overlapLabel;
     UITextField *overlapTextField;
+
+    UILabel *frameSizeLabel;
+    UITextField *frameSizeTextField;
     
+    UILabel *tempoLabel;
+    UITextField *tempoTextField;
     
+    PitchDetector *pitchDetector;
 }
+
+-(void)resetPitchDetector;
+
 @end

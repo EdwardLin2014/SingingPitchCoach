@@ -96,6 +96,7 @@
 {
     switch (midi)
     {
+/*
         case 72:        return 317;
         case 71:        return 304;
         case 70:        return 291;
@@ -122,9 +123,37 @@
         case 49:        return 18;
         case 48:        return 5;
         case 47:        return -8;
+*/
+            
+        case 72:        return 304;
+        case 71:        return 282;
+        case 70:        return 278;
+        case 69:        return 265;
+        case 68:        return 252;
+        case 67:        return 239;
+        case 66:        return 226;
+        case 65:        return 213;
+        case 64:        return 200;
+        case 63:        return 187;
+        case 62:        return 174;
+        case 61:        return 161;
+        case 60:        return 148;
+        case 59:        return 135;
+        case 58:        return 122;
+        case 57:        return 109;
+        case 56:        return 96;
+        case 55:        return 83;
+        case 54:        return 70;
+        case 53:        return 57;
+        case 52:        return 44;
+        case 51:        return 31;
+        case 50:        return 18;
+        case 49:        return 5;
+        case 48:        return -8;
+        case 47:        return -21;
         default:
             if (midi<47)
-                return -8;
+                return -34;
             else
                 return 330;
     }
