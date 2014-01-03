@@ -16,14 +16,21 @@
 		2B0C9A321872C46E00CDFF58 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A311872C46E00CDFF58 /* AppDelegate.m */; };
 		2B0C9A351872C46E00CDFF58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A331872C46E00CDFF58 /* Main.storyboard */; };
 		2B0C9A381872C46E00CDFF58 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A371872C46E00CDFF58 /* ViewController.m */; };
-		2B0C9A3B1872C46E00CDFF58 /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3A1872C46E00CDFF58 /* MyScene.m */; };
-		2B0C9A3D1872C46E00CDFF58 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */; };
+		2B0C9A3B1872C46E00CDFF58 /* StartScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3A1872C46E00CDFF58 /* StartScene.m */; };
 		2B0C9A3F1872C46E00CDFF58 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */; };
 		2B0C9A461872C46E00CDFF58 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A451872C46E00CDFF58 /* XCTest.framework */; };
 		2B0C9A471872C46E00CDFF58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */; };
 		2B0C9A481872C46E00CDFF58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0C9A231872C46E00CDFF58 /* UIKit.framework */; };
 		2B0C9A501872C46E00CDFF58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A4E1872C46E00CDFF58 /* InfoPlist.strings */; };
 		2B0C9A521872C46E00CDFF58 /* SingingPitchCoachTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A511872C46E00CDFF58 /* SingingPitchCoachTests.m */; };
+		2B0C9A821872CEFA00CDFF58 /* GameSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A811872CEFA00CDFF58 /* GameSetting.m */; };
+		2B0C9A881872D07400CDFF58 /* Coaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A871872D07400CDFF58 /* Coaching.m */; };
+		2B0C9A8A1874476E00CDFF58 /* background.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A891874476E00CDFF58 /* background.atlas */; };
+		2B0C9A8C187457DA00CDFF58 /* notes.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2B0C9A8B187457DA00CDFF58 /* notes.atlas */; };
+		2B0C9A9118745C5400CDFF58 /* PitchDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C9A9018745C5400CDFF58 /* PitchDetector.m */; };
+		2BF1ECD2187579B700DD923D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BF1ECD1187579B700DD923D /* CoreAudio.framework */; };
+		2BF1ECD4187579C700DD923D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BF1ECD3187579C700DD923D /* AudioToolbox.framework */; };
+		2BF1ECD8187579D900DD923D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BF1ECD7187579D900DD923D /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,15 +58,26 @@
 		2B0C9A341872C46E00CDFF58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2B0C9A361872C46E00CDFF58 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		2B0C9A371872C46E00CDFF58 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		2B0C9A391872C46E00CDFF58 /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
-		2B0C9A3A1872C46E00CDFF58 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
-		2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		2B0C9A391872C46E00CDFF58 /* StartScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartScene.h; sourceTree = "<group>"; };
+		2B0C9A3A1872C46E00CDFF58 /* StartScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StartScene.m; sourceTree = "<group>"; };
 		2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2B0C9A441872C46E00CDFF58 /* SingingPitchCoachTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SingingPitchCoachTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B0C9A451872C46E00CDFF58 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		2B0C9A4D1872C46E00CDFF58 /* SingingPitchCoachTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SingingPitchCoachTests-Info.plist"; sourceTree = "<group>"; };
 		2B0C9A4F1872C46E00CDFF58 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2B0C9A511872C46E00CDFF58 /* SingingPitchCoachTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingingPitchCoachTests.m; sourceTree = "<group>"; };
+		2B0C9A801872CEFA00CDFF58 /* GameSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSetting.h; sourceTree = "<group>"; };
+		2B0C9A811872CEFA00CDFF58 /* GameSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSetting.m; sourceTree = "<group>"; };
+		2B0C9A861872D07400CDFF58 /* Coaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Coaching.h; sourceTree = "<group>"; };
+		2B0C9A871872D07400CDFF58 /* Coaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Coaching.m; sourceTree = "<group>"; };
+		2B0C9A891874476E00CDFF58 /* background.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = background.atlas; sourceTree = "<group>"; };
+		2B0C9A8B187457DA00CDFF58 /* notes.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = notes.atlas; sourceTree = "<group>"; };
+		2B0C9A8F18745C5400CDFF58 /* PitchDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PitchDetector.h; sourceTree = "<group>"; };
+		2B0C9A9018745C5400CDFF58 /* PitchDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PitchDetector.m; sourceTree = "<group>"; };
+		2BF1ECD1187579B700DD923D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		2BF1ECD3187579C700DD923D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		2BF1ECD5187579D400DD923D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		2BF1ECD7187579D900DD923D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +85,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BF1ECD8187579D900DD923D /* AVFoundation.framework in Frameworks */,
+				2BF1ECD4187579C700DD923D /* AudioToolbox.framework in Frameworks */,
+				2BF1ECD2187579B700DD923D /* CoreAudio.framework in Frameworks */,
 				2B0C9A221872C46E00CDFF58 /* CoreGraphics.framework in Frameworks */,
 				2B0C9A241872C46E00CDFF58 /* UIKit.framework in Frameworks */,
 				2B0C9A261872C46E00CDFF58 /* SpriteKit.framework in Frameworks */,
@@ -109,6 +130,10 @@
 		2B0C9A1E1872C46E00CDFF58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2BF1ECD7187579D900DD923D /* AVFoundation.framework */,
+				2BF1ECD5187579D400DD923D /* AudioUnit.framework */,
+				2BF1ECD3187579C700DD923D /* AudioToolbox.framework */,
+				2BF1ECD1187579B700DD923D /* CoreAudio.framework */,
 				2B0C9A1F1872C46E00CDFF58 /* Foundation.framework */,
 				2B0C9A211872C46E00CDFF58 /* CoreGraphics.framework */,
 				2B0C9A231872C46E00CDFF58 /* UIKit.framework */,
@@ -121,16 +146,16 @@
 		2B0C9A271872C46E00CDFF58 /* SingingPitchCoach */ = {
 			isa = PBXGroup;
 			children = (
+				2B0C9A8E18745A5900CDFF58 /* PitchDetector */,
+				2B0C9A8D18745A3F00CDFF58 /* Scene */,
 				2B0C9A301872C46E00CDFF58 /* AppDelegate.h */,
 				2B0C9A311872C46E00CDFF58 /* AppDelegate.m */,
+				2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */,
 				2B0C9A331872C46E00CDFF58 /* Main.storyboard */,
+				2B0C9A5B1872C4D800CDFF58 /* Resources */,
+				2B0C9A281872C46E00CDFF58 /* Supporting Files */,
 				2B0C9A361872C46E00CDFF58 /* ViewController.h */,
 				2B0C9A371872C46E00CDFF58 /* ViewController.m */,
-				2B0C9A391872C46E00CDFF58 /* MyScene.h */,
-				2B0C9A3A1872C46E00CDFF58 /* MyScene.m */,
-				2B0C9A3C1872C46E00CDFF58 /* Spaceship.png */,
-				2B0C9A3E1872C46E00CDFF58 /* Images.xcassets */,
-				2B0C9A281872C46E00CDFF58 /* Supporting Files */,
 			);
 			path = SingingPitchCoach;
 			sourceTree = "<group>";
@@ -162,6 +187,37 @@
 				2B0C9A4E1872C46E00CDFF58 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2B0C9A5B1872C4D800CDFF58 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A8B187457DA00CDFF58 /* notes.atlas */,
+				2B0C9A891874476E00CDFF58 /* background.atlas */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		2B0C9A8D18745A3F00CDFF58 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A391872C46E00CDFF58 /* StartScene.h */,
+				2B0C9A3A1872C46E00CDFF58 /* StartScene.m */,
+				2B0C9A861872D07400CDFF58 /* Coaching.h */,
+				2B0C9A871872D07400CDFF58 /* Coaching.m */,
+				2B0C9A801872CEFA00CDFF58 /* GameSetting.h */,
+				2B0C9A811872CEFA00CDFF58 /* GameSetting.m */,
+			);
+			name = Scene;
+			sourceTree = "<group>";
+		};
+		2B0C9A8E18745A5900CDFF58 /* PitchDetector */ = {
+			isa = PBXGroup;
+			children = (
+				2B0C9A8F18745C5400CDFF58 /* PitchDetector.h */,
+				2B0C9A9018745C5400CDFF58 /* PitchDetector.m */,
+			);
+			name = PitchDetector;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,7 +298,8 @@
 			files = (
 				2B0C9A2C1872C46E00CDFF58 /* InfoPlist.strings in Resources */,
 				2B0C9A3F1872C46E00CDFF58 /* Images.xcassets in Resources */,
-				2B0C9A3D1872C46E00CDFF58 /* Spaceship.png in Resources */,
+				2B0C9A8C187457DA00CDFF58 /* notes.atlas in Resources */,
+				2B0C9A8A1874476E00CDFF58 /* background.atlas in Resources */,
 				2B0C9A351872C46E00CDFF58 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,9 +319,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B0C9A3B1872C46E00CDFF58 /* MyScene.m in Sources */,
+				2B0C9A3B1872C46E00CDFF58 /* StartScene.m in Sources */,
+				2B0C9A881872D07400CDFF58 /* Coaching.m in Sources */,
+				2B0C9A821872CEFA00CDFF58 /* GameSetting.m in Sources */,
 				2B0C9A381872C46E00CDFF58 /* ViewController.m in Sources */,
 				2B0C9A321872C46E00CDFF58 /* AppDelegate.m in Sources */,
+				2B0C9A9118745C5400CDFF58 /* PitchDetector.m in Sources */,
 				2B0C9A2E1872C46E00CDFF58 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
 				INFOPLIST_FILE = "SingingPitchCoach/SingingPitchCoach-Info.plist";
@@ -406,6 +467,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SingingPitchCoach/SingingPitchCoach-Prefix.pch";
 				INFOPLIST_FILE = "SingingPitchCoach/SingingPitchCoach-Info.plist";
@@ -476,6 +538,7 @@
 				2B0C9A571872C46E00CDFF58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B0C9A581872C46E00CDFF58 /* Build configuration list for PBXNativeTarget "SingingPitchCoachTests" */ = {
 			isa = XCConfigurationList;
@@ -484,6 +547,7 @@
 				2B0C9A5A1872C46E00CDFF58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

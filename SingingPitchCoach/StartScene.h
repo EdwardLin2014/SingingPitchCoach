@@ -7,7 +7,10 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "PitchDetector.h"
 
-@interface MyScene : SKScene
-
+@interface StartScene : SKScene
+{
+    PitchDetector *pitchDetector;
+}
 @end
