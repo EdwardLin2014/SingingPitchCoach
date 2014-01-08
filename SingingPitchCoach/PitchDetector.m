@@ -31,7 +31,7 @@
     
     [self initializePitchDetecter];
     [self printPitchDetecterConfig];
-    
+
     return self;
 }
 
@@ -285,7 +285,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
 		return renderErr;
 	
 	// Fill the buffer with our sampled data. If we fill our buffer, run the fft.
-    // index is always smaller
+    // index is always smaller than the bufferCapacity
 	int read = bufferCapacity - index;
 	if (read > inNumberFrames)
     {
@@ -302,14 +302,14 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
         /*---------------------Method: Product of FFT and Cepstrum---------------------(Begin)*/
 		// We want to deal with only floating point values here.
 		ConvertInt16ToFloat(THIS, dataBuffer, outputBuffer, bufferCapacity);
-        
+
         /*
          * Look at the real signal as an interleaved complex vector by casting it.
          * Then call the transformation function vDSP_ctoz to get a split complex
          * vector, which for a real signal, divides into an even-odd configuration.
          */
         vDSP_ctoz((COMPLEX*)outputBuffer, 2, &FFT, 1, nOver2);
-		
+        
         // Carry out a Forward FFT transform.
         vDSP_fft_zrip(fftSetup, &FFT, 1, log2n, FFT_FORWARD);
         
@@ -326,7 +326,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
         }
         frequency = bin*(sampleRate/bufferCapacity);
         midiNum = [THIS freqToMIDI:frequency];
-        pitch = [THIS midiToString:midiNum];
+        pitch = [THIS midiToPitch:midiNum];
         //        NSLog(@"%f %d %d %@", frequency, bin, midiNum, pitch);
         
         float* absFFTFloat = (float*)malloc(nOver2*sizeof(float));
@@ -372,7 +372,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
         runningTime = endTime-startTime;
         frequency = bin*(sampleRate/bufferCapacity);
         midiNum = [THIS freqToMIDI:frequency];
-        pitch = [THIS midiToString:midiNum];
+        pitch = [THIS midiToPitch:midiNum];
         
         NSLog(@"%f %f %d %d %@", runningTime, frequency, bin, midiNum, pitch);
         [UI moveIndicatorByMIDI:midiNum];
@@ -472,7 +472,7 @@ void ConvertInt16ToFloat(PitchDetector* THIS, void *buf, float *outputBuf, size_
         return 12*log2f(frequency/440) + 69;
 }
 
-- (NSString*)midiToString:(int)midiNote
+- (NSString*)midiToPitch:(int)midiNote
 {
     if (midiNote<=-1)
         return @"NIL";
@@ -531,6 +531,30 @@ void ConvertInt16ToFloat(PitchDetector* THIS, void *buf, float *outputBuf, size_
     NSLog (@"  Bytes per Frame:     %10ld",    asbd.mBytesPerFrame);
     NSLog (@"  Channels per Frame:  %10ld",    asbd.mChannelsPerFrame);
     NSLog (@"  Bits per Channel:    %10ld",    asbd.mBitsPerChannel);
+}
+
+// FIXME: Seem should not use this function, as it is very time comsumption need +100ms
+void writeToDocFile(float* data, int size, NSString* fileName)
+{
+    NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *dataFile = [docDir stringByAppendingPathComponent:fileName];
+    
+    NSLog (@"Path: %@", dataFile);
+    
+    // Not exist, create file
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dataFile])
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:docDir withIntermediateDirectories:NO attributes:nil error:nil];
+        [[NSFileManager defaultManager] createFileAtPath:dataFile contents:nil attributes:nil];
+    }
+    
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:dataFile];
+    
+    for (int i=0; i<size && data+i != nil; i++)
+        [fileHandle writeData:[[NSString stringWithFormat:@"%f ", data[i]] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    [fileHandle synchronizeFile];
+    [fileHandle closeFile];
 }
 
 @end
