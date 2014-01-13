@@ -67,15 +67,25 @@
     float tempoRate;
     
     Note *score1[8];
-    int notePos;
+    
     SKLabelNode *readyLabel;
     SKLabelNode *goLabel;
     
     AVPlayer *audioPlayer;
+    
+    bool gameOver;
+    int notePos;
+    CFTimeInterval nextNoteTime;
+    
+    float scorePoint;
+    float totalScorePoint;
+    float performanceScorePoint;
+    
+    SKSpriteNode* scoreLine;
 }
 
 // Scores
--(void)playNote:(Note *)note;
+-(void)playNote:(Note *)note isLastNote:(bool)isLastNote;
 -(void)playEighthNote:(NSString *)pitch;
 -(void)playQuarterNote:(NSString *)pitch;
 -(void)playHalfNote:(NSString *)pitch;
@@ -89,4 +99,10 @@
 
 // Play Sound
 -(void)playSound:(NSString *)fileName;
+
+// Game Control
+- (void)startTheGame;
+- (void)endTheGame;
+- (bool)isScorePoint:(NSString *)pitch;
+
 @end

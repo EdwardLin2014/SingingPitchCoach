@@ -80,6 +80,11 @@
     return isPlayed;
 }
 
+- (void)resetPlayed
+{
+   isPlayed = NO;
+}
+
 - (void)play
 {
     isPlayed = YES;

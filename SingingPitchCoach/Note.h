@@ -33,6 +33,7 @@
 - (Boolean)getPlayDemo;
 - (SKSpriteNode*)getUI;
 - (Boolean)isPlayed;
+- (void)resetPlayed;
 
 - (void)play;
 

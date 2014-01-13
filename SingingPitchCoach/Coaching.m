@@ -30,20 +30,20 @@
         
         pianoRoll = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5PianoRoll"]];
         pianoRoll.position = CGPointMake(43, (CGRectGetMidY(self.frame)-10));
-        pianoRoll.zPosition = 1;
+        pianoRoll.zPosition = 3;
         [self addChild:pianoRoll];
         
-        SKSpriteNode* pianoRollBK = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5PianoRoll"]];
-        pianoRollBK.position = CGPointMake(43, (CGRectGetMidY(self.frame)-10));
-        pianoRollBK.zPosition = 2;
-        [self addChild:pianoRollBK];
+        scoreLine = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"ScoreLine"]];
+        scoreLine.position = CGPointMake(84, (CGRectGetMidY(self.frame)-10));
+        scoreLine.zPosition = 1;
+        [self addChild:scoreLine];
         
         NSLog(@"CSC5PianoRoll Position x: %f; Position y:%f", pianoRoll.position.x,pianoRoll.position.y);
         NSLog(@"CSC5PianoRoll Width: %f; Height: %f", pianoRoll.size.width, pianoRoll.size.height);
         
         indicator = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"indicator"]];
         indicator.position = CGPointMake(15, -8);
-        indicator.zPosition = 3;
+        indicator.zPosition = 4;
         [self addChild:indicator];
         
         NSLog(@"indicator Position x: %f; Position y:%f", indicator.position.x,indicator.position.y);
@@ -61,7 +61,7 @@
         animationSpeed = tempoRate*710.5/458;
         
         // Create Score 1
-        notePos = -2;
+//        notePos = -2;
         score1[0] = [[Note alloc] initWithPitch:@"C3" AndTempoRate:tempoRate AndDuration:@"full" AndPlayDemo:NO];
         score1[1] = [[Note alloc] initWithPitch:@"D3" AndTempoRate:tempoRate AndDuration:@"full" AndPlayDemo:NO];
         score1[2] = [[Note alloc] initWithPitch:@"E3" AndTempoRate:tempoRate AndDuration:@"full" AndPlayDemo:NO];
@@ -109,6 +109,8 @@
         
         NSLog(@"tempo: %d", [userDefaults integerForKey:@"tempo"]);
         NSLog(@"animationSpeed: %f", animationSpeed);
+
+        [self startTheGame];
     }
     
     return self;
@@ -116,11 +118,27 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    /* stop the mic */
-    [pitchDetector TurnOffMicrophone];
-    
-    StartScene* home = [[StartScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
-   [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
+    for (UITouch *touch in touches)
+    {
+        SKNode *n = [self nodeAtPoint:[touch locationInNode:self]];
+        if(n!=self && [n.name isEqual: @"restartLabel"])
+        {
+            [[self childNodeWithName:@"scorePointLabel"] removeFromParent];
+            [[self childNodeWithName:@"restartLabel"] removeFromParent];
+            [[self childNodeWithName:@"exitLabel"] removeFromParent];
+            [self startTheGame];
+            return;
+        }
+        
+        if(n!=self && [n.name isEqual: @"exitLabel"])
+        {
+            /* stop the mic */
+            [pitchDetector TurnOffMicrophone];
+            
+            StartScene* home = [[StartScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
+            [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
+        }
+    }
 }
 
 #pragma mark Scores
@@ -128,9 +146,12 @@
 {
     /* Called before each frame is rendered */
     
+    if (gameOver)
+        return;
+    
     /* Add Score - Begin */
     // Score 1
-    static CFTimeInterval nextNoteTime = 0;
+//    static CFTimeInterval nextNoteTime = 0;
     
     if (notePos == -2 && currentTime >= nextNoteTime)
     {
@@ -182,8 +203,11 @@
         nextNoteTime = currentTime + [score1[notePos] getDurationInTime];
         NSLog(@"%d: nextNoteTime: %f, currentTime: %f, duration: %f", notePos, nextNoteTime, currentTime, [score1[notePos] getDurationInTime]);
         
-//        [self playFullNote:[score1[notePos] getPitch]];
-        [self playNote:score1[notePos]];
+        if (notePos ==7)
+            [self playNote:score1[notePos] isLastNote:YES];
+        else
+            [self playNote:score1[notePos] isLastNote:NO];
+        
         notePos++;
     }
     /* Add Score - End */
@@ -191,10 +215,18 @@
     /* Check Whether score meet piano roll. If yes, play sound! - Begin */
     for (int i=0; i<8; i++)
     {
-        if([score1[i] getUI].hidden || [score1[i] isPlayed])
-            continue;
+//        if([score1[i] getUI].hidden || [score1[i] isPlayed])
+//            continue;
+
+        if ([[score1[i] getUI] intersectsNode:scoreLine] && ![score1[i] getUI].hidden)
+        {
+            totalScorePoint++;
+            if ([self isScorePoint:[score1[i] getPitch]])
+                scorePoint++;
+        }
         
-        if ([[score1[i] getUI] intersectsNode:pianoRoll])
+        
+        if ([[score1[i] getUI] intersectsNode:scoreLine] && ![score1[i] isPlayed] && ![score1[i] getUI].hidden)
         {
             [score1[i] play];
             
@@ -220,7 +252,7 @@
     
 }
 
--(void)playNote:(Note *)note
+-(void)playNote:(Note *)note isLastNote:(bool)isLastNote;
 {
     SKTextureAtlas *notesAtlas = [SKTextureAtlas atlasNamed:@"notes"];
     SKSpriteNode *noteUI;
@@ -259,13 +291,16 @@
         NSLog(@"error in play occur!");
         return;
     }
-    noteUI.zPosition = 1;
+    noteUI.zPosition = 2;
     [self addChild:noteUI];
     [note setUI:noteUI];
     
     linearMove.timingMode = SKActionTimingLinear;
     [noteUI runAction:linearMove completion:^{
         [noteUI removeFromParent];
+        noteUI.hidden = YES;
+        if (isLastNote)
+            [self endTheGame];
     }];
 }
 
@@ -274,7 +309,7 @@
     SKTextureAtlas *notesAtlas = [SKTextureAtlas atlasNamed:@"notes"];
     SKSpriteNode *note = [SKSpriteNode spriteNodeWithTexture:[notesAtlas textureNamed:@"EighthNote"]];
     note.position = CGPointMake(574, [self pitchToPosition:pitch]);
-    note.zPosition = 1;
+    note.zPosition = 2;
     [self addChild:note];
     
     NSLog(@"Eighth Note Position x: %f; Position y:%f", note.position.x-note.size.width,note.position.y);
@@ -291,7 +326,7 @@
     SKTextureAtlas *notesAtlas = [SKTextureAtlas atlasNamed:@"notes"];
     SKSpriteNode *note = [SKSpriteNode spriteNodeWithTexture:[notesAtlas textureNamed:@"QuarterNote"]];
     note.position = CGPointMake(590, [self pitchToPosition:pitch]);
-    note.zPosition = 1;
+    note.zPosition = 2;
     [self addChild:note];
     
     NSLog(@"Quarter Note Position x: %f; Position y:%f", note.position.x-note.size.width,note.position.y);
@@ -308,7 +343,7 @@
     SKTextureAtlas *notesAtlas = [SKTextureAtlas atlasNamed:@"notes"];
     SKSpriteNode *note = [SKSpriteNode spriteNodeWithTexture:[notesAtlas textureNamed:@"HalfNote"]];
     note.position = CGPointMake(621.5, [self pitchToPosition:pitch]);
-    note.zPosition = 1;
+    note.zPosition = 2;
     [self addChild:note];
     
     NSLog(@"Half Note Position x: %f; Position y:%f", note.position.x-note.size.width,note.position.y);
@@ -325,7 +360,7 @@
     SKTextureAtlas *notesAtlas = [SKTextureAtlas atlasNamed:@"notes"];
     SKSpriteNode *note = [SKSpriteNode spriteNodeWithTexture:[notesAtlas textureNamed:@"FullNote"]];
     note.position = CGPointMake(684.5, [self pitchToPosition:pitch]);
-    note.zPosition = 1;
+    note.zPosition = 2;
     [self addChild:note];
 
     NSLog(@"Full Note Position x: %f; Position y:%f", note.position.x-note.size.width,note.position.y);
@@ -432,6 +467,108 @@
     [audioPlayer setRate:tempoRate/120];
     
     [audioPlayer play];
+}
+
+#pragma mark Game Control
+// Reset the notes position?
+- (void)startTheGame
+{
+    gameOver = NO;
+    notePos = -2;
+    nextNoteTime = 0;
+
+    indicator.hidden = NO;
+    scorePoint = 0;
+    totalScorePoint = 0;
+    performanceScorePoint = 0;
+}
+
+- (void)endTheGame
+{
+    if (gameOver)
+        return;
+    
+    for (int i=0; i<8; i++)
+        [score1[i] resetPlayed];
+    [self removeAllActions];
+    indicator.hidden = YES;
+    gameOver = YES;
+    
+    // Your Score
+    performanceScorePoint = scorePoint / totalScorePoint * 100;
+    
+    NSLog(@"scorePoint: %.2f", scorePoint);
+    NSLog(@"totalScorePoint: %.2f", totalScorePoint);
+    NSLog(@"performanceScorePoint: %.2f", performanceScorePoint);
+    
+    SKLabelNode *scorePointlabel;
+    scorePointlabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondenseMedium"];
+    scorePointlabel.name = @"scorePointLabel";
+    scorePointlabel.text = [NSString stringWithFormat:@"Your Performance Score: %.2f%%", performanceScorePoint];
+    scorePointlabel.scale = 0.1;
+    scorePointlabel.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.6);
+    scorePointlabel.fontColor = [SKColor yellowColor];
+    [self addChild:scorePointlabel];
+    
+    SKLabelNode *restartLabel;
+    restartLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+    restartLabel.name = @"restartLabel";
+    restartLabel.text = @"Play Again?";
+    restartLabel.scale = 0.5;
+    restartLabel.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.4);
+    restartLabel.fontColor = [SKColor yellowColor];
+    [self addChild:restartLabel];
+    
+    SKLabelNode *exitLabel;
+    exitLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+    exitLabel.name = @"exitLabel";
+    exitLabel.text = @"Exit?";
+    exitLabel.scale = 0.5;
+    exitLabel.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.2);
+    exitLabel.fontColor = [SKColor yellowColor];
+    [self addChild:exitLabel];
+    
+    
+    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
+    
+    [scorePointlabel runAction:labelScaleAction];
+    [restartLabel runAction:labelScaleAction];
+    [exitLabel runAction:labelScaleAction];
+}
+
+- (bool)isScorePoint:(NSString *)pitch
+{
+    NSLog(@"Pitch: %@; Indicator Position y: %f", pitch, indicator.position.y);
+    
+    if (indicator.hidden)
+        return false;
+    
+    if ([pitch isEqualToString:@"C5"] && (indicator.position.y > 288.5 && indicator.position.y <= 300.5))           return true;
+    else if ([pitch isEqualToString:@"B4"] && (indicator.position.y > 276.5 && indicator.position.y <= 288.5))      return true;
+    else if ([pitch isEqualToString:@"A#4"] && (indicator.position.y > 264.5 && indicator.position.y <= 276.5))     return true;
+    else if ([pitch isEqualToString:@"A4"] && (indicator.position.y > 252.5 && indicator.position.y <= 264.5))      return true;
+    else if ([pitch isEqualToString:@"G#4"] && (indicator.position.y > 240.5 && indicator.position.y <= 252.5))     return true;
+    else if ([pitch isEqualToString:@"G4"] && (indicator.position.y > 228.5 && indicator.position.y <= 240.5))      return true;
+    else if ([pitch isEqualToString:@"F#4"] && (indicator.position.y > 216.5 && indicator.position.y <= 228.5))     return true;
+    else if ([pitch isEqualToString:@"F4"] && (indicator.position.y > 204.5 && indicator.position.y <= 216.5))      return true;
+    else if ([pitch isEqualToString:@"E4"] && (indicator.position.y > 192.5 && indicator.position.y <= 204.5))      return true;
+    else if ([pitch isEqualToString:@"D#4"] && (indicator.position.y > 180.5 && indicator.position.y <= 192.5))     return true;
+    else if ([pitch isEqualToString:@"D4"] && (indicator.position.y > 168.5 && indicator.position.y <= 180.5))      return true;
+    else if ([pitch isEqualToString:@"C#4"] && (indicator.position.y > 156.5 && indicator.position.y <= 168.5))     return true;
+    else if ([pitch isEqualToString:@"C4"] && (indicator.position.y > 144.5 && indicator.position.y <= 156.5))      return true;
+    else if ([pitch isEqualToString:@"B3"] && (indicator.position.y > 132.5 && indicator.position.y <= 144.5))      return true;
+    else if ([pitch isEqualToString:@"A#3"] && (indicator.position.y > 120.5 && indicator.position.y <= 132.5))      return true;
+    else if ([pitch isEqualToString:@"A3"] && (indicator.position.y  > 108.5 && indicator.position.y <= 120.5))     return true;
+    else if ([pitch isEqualToString:@"G#3"] && (indicator.position.y > 96.5 && indicator.position.y <= 108.5))      return true;
+    else if ([pitch isEqualToString:@"G3"] && (indicator.position.y > 84.5 && indicator.position.y <= 96.5))        return true;
+    else if ([pitch isEqualToString:@"F#3"] && (indicator.position.y > 73.5 && indicator.position.y <= 84.5))       return true;
+    else if ([pitch isEqualToString:@"F3"] && (indicator.position.y > 60.5 && indicator.position.y <= 73.5))        return true;
+    else if ([pitch isEqualToString:@"E3"] && (indicator.position.y > 48.5 && indicator.position.y <= 60.5))        return true;
+    else if ([pitch isEqualToString:@"D#3"] && (indicator.position.y >36.5 && indicator.position.y <= 48.5))        return true;
+    else if ([pitch isEqualToString:@"D3"] && (indicator.position.y > 24.5 && indicator.position.y <= 36.5))        return true;
+    else if ([pitch isEqualToString:@"C#3"] && (indicator.position.y > 12 && indicator.position.y <= 24.5))         return true;
+    else if ([pitch isEqualToString:@"C3"] && (indicator.position.y >= 0 && indicator.position.y <=12))             return true;
+    else                                                                                                            return false;
 }
 
 @end
