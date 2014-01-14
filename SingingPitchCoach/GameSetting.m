@@ -7,7 +7,8 @@
 //
 
 #import "GameSetting.h"
-#import "StartScene.h"
+//#import "StartScene.h"
+#import "TestingScene.h"
 #import "PitchDetector.h"
 
 @implementation GameSetting
@@ -128,7 +129,9 @@
             [userDefaults synchronize];
             [self resetPitchDetector];
             
-            StartScene* home = [[StartScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
+//            StartScene* home = [[StartScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
+//            [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
+            TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
             [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
         }
     }

@@ -15,6 +15,21 @@
 
 @class Coaching;
 
+@class test_1_4096_0;
+@class test_1_4096_50;
+@class test_1_8192_0;
+@class test_1_8192_50;
+@class test_1_16384_0;
+@class test_1_16384_50;
+
+@class test_2_Fly_Me_To_The_Moon;
+@class test_4_My_Heart_Will_Go_On;
+
+@class test_3_Major_Scale;
+@class test_3_Minor_Scale;
+@class test_3_Arpeggios;
+@class test_3_Arpeggios_7th;
+
 /**
  *	This is a singleton class that manages all the low level CoreAudio/RemoteIO
  *	elements. A singleton is used since we should never be instantiating more
@@ -26,6 +41,22 @@
 @interface PitchDetector : NSObject
 {
     Coaching *UI;
+    
+    test_1_4096_0 *test_1_4096_0UI;
+    test_1_4096_50 *test_1_4096_50UI;
+    test_1_8192_0 *test_1_8192_0UI;
+    test_1_8192_50 *test_1_8192_50UI;
+    test_1_16384_0 *test_1_16384_0UI;
+    test_1_16384_50 *test_1_16384_50UI;
+    
+    test_2_Fly_Me_To_The_Moon *test_2_Fly_Me_To_The_MoonUI;
+    test_4_My_Heart_Will_Go_On *test_4_My_Heart_Will_Go_OnUI;
+    
+    test_3_Major_Scale *test_3_Major_ScaleUI;
+    test_3_Minor_Scale *test_3_Minor_ScaleUI;
+    test_3_Arpeggios *test_3_ArpeggiosUI;
+    test_3_Arpeggios_7th *test_3_Arpeggios_7thUI;
+    
     NSUserDefaults *userDefaults;
     
     float sampleRate;                           // Fix this sample rate, as Human Pitch Range A0(27.5Hz) to B8(7900Hz)
@@ -68,6 +99,22 @@
 /* Initialise and Turn On, Turn On and Turn Off the microphone */
 - (void)bootUpAndTurnOnMicrophone;
 - (void)TurnOnMicrophone:(Coaching*)aUI;
+
+- (void)TurnOnMicrophone_test_1_4096_0:(test_1_4096_0*)aUI;
+- (void)TurnOnMicrophone_test_1_4096_50:(test_1_4096_50*)aUI;
+- (void)TurnOnMicrophone_test_1_8192_0:(test_1_8192_0*)aUI;
+- (void)TurnOnMicrophone_test_1_8192_50:(test_1_8192_50*)aUI;
+- (void)TurnOnMicrophone_test_1_16384_0:(test_1_16384_0*)aUI;
+- (void)TurnOnMicrophone_test_1_16384_50:(test_1_16384_50*)aUI;
+
+- (void)TurnOnMicrophone_test_2_Fly_Me_To_The_Moon:(test_2_Fly_Me_To_The_Moon*)aUI;
+- (void)TurnOnMicrophone_test_4_My_Heart_Will_Go_On:(test_4_My_Heart_Will_Go_On*)aUI;
+
+- (void)TurnOnMicrophone_test_3_Major_Scale:(test_3_Major_Scale*)aUI;
+- (void)TurnOnMicrophone_test_3_Minor_Scale:(test_3_Minor_Scale*)aUI;
+- (void)TurnOnMicrophone_test_3_Arpeggios:(test_3_Arpeggios*)aUI;
+- (void)TurnOnMicrophone_test_3_Arpeggios_7th:(test_3_Arpeggios_7th*)aUI;
+
 - (void)TurnOffMicrophone;
 
 /* For Debug Only */
