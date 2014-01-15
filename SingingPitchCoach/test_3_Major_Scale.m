@@ -104,10 +104,18 @@
         instructionLabel2.fontColor = [SKColor yellowColor];
         [self addChild:instructionLabel2];
         
-        SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
+        instructionLabel3 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+        instructionLabel3.name = @"instructionLabel3";
+        instructionLabel3.text = @"Exit?";
+        instructionLabel3.scale = 0.5;
+        instructionLabel3.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.2);
+        instructionLabel3.fontColor = [SKColor yellowColor];
+        [self addChild:instructionLabel3];
         
+        SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
         [instructionLabel1 runAction:labelScaleAction];
         [instructionLabel2 runAction:labelScaleAction];
+        [instructionLabel3 runAction:labelScaleAction];
         
         performanceScoreLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
         performanceScoreLabel.name = @"performanceScore";
@@ -376,6 +384,7 @@
         {
             [instructionLabel1 removeFromParent];
             [instructionLabel2 removeFromParent];
+            [instructionLabel3 removeFromParent];
             
             [self startTheGame];
         }
@@ -389,7 +398,7 @@
             return;
         }
         
-        if(n!=self && [n.name isEqual: @"exitLabel"])
+        if(n!=self && ([n.name isEqual: @"exitLabel"]||[n.name isEqual: @"instructionLabel3"]))
         {
             indicator.hidden = YES;
             

@@ -59,6 +59,7 @@
     
     SKLabelNode *instructionLabel1;
     SKLabelNode *instructionLabel2;
+    SKLabelNode *instructionLabel3;
     SKLabelNode *readyLabel;
     SKLabelNode *goLabel;
     

@@ -123,11 +123,19 @@
         instructionLabel2.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.4);
         instructionLabel2.fontColor = [SKColor yellowColor];
         [self addChild:instructionLabel2];
+
+        instructionLabel3 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+        instructionLabel3.name = @"instructionLabel3";
+        instructionLabel3.text = @"Exit?";
+        instructionLabel3.scale = 0.5;
+        instructionLabel3.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.2);
+        instructionLabel3.fontColor = [SKColor yellowColor];
+        [self addChild:instructionLabel3];
         
         SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
-        
         [instructionLabel1 runAction:labelScaleAction];
         [instructionLabel2 runAction:labelScaleAction];
+        [instructionLabel3 runAction:labelScaleAction];
         
         gameOver = YES;
     }
@@ -390,6 +398,7 @@
         {
             [instructionLabel1 removeFromParent];
             [instructionLabel2 removeFromParent];
+            [instructionLabel3 removeFromParent];
             
             [self startTheGame];
         }
@@ -403,7 +412,7 @@
             return;
         }
         
-        if(n!=self && [n.name isEqual: @"exitLabel"])
+        if(n!=self && ([n.name isEqual: @"exitLabel"]||[n.name isEqual: @"instructionLabel3"]))
         {
             indicator.hidden = YES;
             
@@ -558,7 +567,7 @@
                 case 17:        tmp = @"18_spring";                         break;
                 case 18:        tmp = @"19_is";                             break;
                 case 19:        tmp = @"20_like";                           break;
-                case 20:        tmp = @"21_on";                             break;
+                case 20:        tmp = @"21_F_on";                           break;
                 case 21:        tmp = @"22_ju";                             break;
                 case 22:        tmp = @"23_pi";                             break;
                 case 23:        tmp = @"24_ter";                            break;

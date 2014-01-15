@@ -7,6 +7,7 @@
 //
 @import AVFoundation;
 #import <SpriteKit/SpriteKit.h>
+#import "Note.h"
 
 // Pitch's y position
 #define C5_y        294.5
@@ -39,11 +40,38 @@
 
 @interface test_4_My_Heart_Will_Go_On : SKScene
 {
-        SKSpriteNode *indicator;
+    PitchDetector *pitchDetector;
+    SKSpriteNode *indicator;
+    SKSpriteNode* scoreLine;
+    
+    NSUserDefaults *userDefaults;
+    float animationSpeed;
+    float tempoRate;
+    
+    Note *score[42];
+    
+    bool gameOver;
+    int notePos;
+    CFTimeInterval nextNoteTime;
+    
+    float scorePoint;
+    float totalScorePoint;
+    float performanceScorePoint;
+    
+    SKLabelNode *instructionLabel1;
+    SKLabelNode *instructionLabel2;
+    SKLabelNode *instructionLabel3;
+    SKLabelNode *readyLabel;
+    SKLabelNode *goLabel;
+    
+    AVPlayer *audioPlayer;
 }
 
 // Indicator Movement
 -(int)midiToPosition:(int)midi;
 -(void)moveIndicatorByMIDI:(int)midi;
+
+- (void)startTheGame;
+- (void)endTheGame;
 
 @end
