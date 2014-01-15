@@ -64,6 +64,9 @@
     SKLabelNode *goLabel;
     
     AVPlayer *audioPlayer;
+    
+    SKLabelNode *performanceScoreLabel;
+    SKShapeNode *filledCircle;
 }
 
 // Indicator Movement

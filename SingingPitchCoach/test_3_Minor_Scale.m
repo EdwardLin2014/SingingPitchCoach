@@ -109,6 +109,25 @@
         [instructionLabel1 runAction:labelScaleAction];
         [instructionLabel2 runAction:labelScaleAction];
         
+        performanceScoreLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+        performanceScoreLabel.name = @"performanceScore";
+        performanceScoreLabel.text = @"Score: 0.00%";
+        performanceScoreLabel.fontSize = 25;
+        performanceScoreLabel.position = CGPointMake(140, CGRectGetMaxY(self.frame)-20);
+        performanceScoreLabel.fontColor = [SKColor redColor];
+        [self addChild:performanceScoreLabel];
+        
+        filledCircle = [[SKShapeNode alloc]init];
+        UIBezierPath *circlePath = [[UIBezierPath alloc] init];
+        [circlePath moveToPoint:CGPointMake(0.0, 0.0)];
+        [circlePath addArcWithCenter:CGPointMake(0.0, 0.0) radius:6.0 startAngle:0.0 endAngle:(M_PI*2.0) clockwise:YES];
+        filledCircle.path = circlePath.CGPath;
+        filledCircle.strokeColor = [SKColor clearColor];
+        filledCircle.fillColor = [SKColor redColor];
+        filledCircle.hidden = YES;
+        filledCircle.zPosition = 3;
+        [self addChild:filledCircle];
+        
         gameOver = YES;
     }
     
@@ -213,13 +232,10 @@
         [score[i] resetPlayed];
     [self removeAllActions];
     indicator.hidden = YES;
+    filledCircle.hidden = YES;
     
     /* Your Score */
     performanceScorePoint = scorePoint / totalScorePoint * 100;
-    
-    NSLog(@"scorePoint: %.2f", scorePoint);
-    NSLog(@"totalScorePoint: %.2f", totalScorePoint);
-    NSLog(@"performanceScorePoint: %.2f", performanceScorePoint);
     
     SKLabelNode *scorePointlabel;
     scorePointlabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondenseMedium"];
@@ -526,6 +542,24 @@
             [self playSound:tmp];
         }
     }
+    if ([[score[16] getUI] intersectsNode:scoreLine] && ![score[16] isPlayed] && ![score[16] getUI].hidden)
+    {
+        [score[16] play];
+        
+        NSString *tmp = [score[16] getPitch];
+        if ([[score[16] getDurationInString] isEqualToString:@"eighth"])
+            tmp = [tmp stringByAppendingString:@"_8"];
+        else if ([[score[16] getDurationInString] isEqualToString:@"quarter"])
+            tmp = [tmp stringByAppendingString:@"_4"];
+        else if ([[score[16] getDurationInString] isEqualToString:@"half"])
+            tmp = [tmp stringByAppendingString:@"_2"];
+        else if ([[score[16] getDurationInString] isEqualToString:@"full"])
+            tmp = [tmp stringByAppendingString:@"_1"];
+        else
+            NSLog(@"cannot find the duration?");
+        
+        [self playSound:tmp];
+    }
     /* ------------------------------------------ Play Demo ------------------------------------------ End */
     
     /* ------------------------------------------ Calculate your Score ------------------------------------------ Begin */
@@ -535,9 +569,34 @@
         {
             totalScorePoint++;
             if ([self isScorePoint:[score[i] getPitch]])
+            {
                 scorePoint++;
+                
+                SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction fadeInWithDuration:0.1]]];
+                //                SKAction *blink = [SKAction sequence:@[[SKAction fadeAlphaTo:0 duration:0.1],[SKAction fadeAlphaTo:1 duration:0.1]]];
+                SKAction *blinkForTime = [SKAction repeatAction:blink count:5];
+                [[score[i] getUI] runAction:blinkForTime];
+                
+                filledCircle.hidden = NO;
+                filledCircle.fillColor = [SKColor blueColor];
+                filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+            }
+            else
+            {
+                filledCircle.hidden = NO;
+                filledCircle.fillColor = [SKColor redColor];
+                filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+            }
         }
     }
+    
+    /* Your Score */
+    performanceScorePoint = scorePoint / totalScorePoint * 100;
+    
+    if (isnan(performanceScorePoint))
+        performanceScoreLabel.text = @"Score: 0.00%";
+    else
+        performanceScoreLabel.text = [NSString stringWithFormat:@"Score: %.2f%%", performanceScorePoint];
     /* ------------------------------------------ Calculate your Score ------------------------------------------ End */
 }
 
