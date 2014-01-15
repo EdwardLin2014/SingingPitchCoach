@@ -24,8 +24,12 @@
             duration = tempoRate*31/458;
         else if ([setDuration isEqualToString:@"quarter"])
             duration = tempoRate*63/458;
+        else if ([setDuration isEqualToString:@"thirdeighth"])
+            duration = tempoRate*94/458;
         else if ([setDuration isEqualToString:@"half"])
             duration = tempoRate*126/458;
+        else if ([setDuration isEqualToString:@"thirdfourth"])
+            duration = tempoRate*189/458;
         else if ([setDuration isEqualToString:@"full"])
             duration = tempoRate*252/458;
         
@@ -57,10 +61,15 @@
         return @"eighth";
     else if (duration == tempoRate*63/458)
         return @"quarter";
+    else if (duration == tempoRate*94/458)
+        return @"thirdeighth";
     else if (duration == tempoRate*126/458)
         return @"half";
+    else if (duration == tempoRate*189/458)
+        return @"thirdfourth";
     else if (duration == tempoRate*252/458)
         return @"full";
+
     else
         return @"unknown";
 }

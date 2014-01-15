@@ -62,14 +62,14 @@
         score[7] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
         score[8] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[9] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[10] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[11] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[9] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[10] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[11] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
-        score[12] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[13] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[14] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[12] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[13] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[14] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
         /* Touch the Label to start */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];

@@ -64,16 +64,16 @@
         score[9] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
         score[10] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[11] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[12] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[13] = [[Note alloc] initWithPitch:@"E4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[14] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[11] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[12] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[13] = [[Note alloc] initWithPitch:@"E4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[14] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
-        score[15] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[16] = [[Note alloc] initWithPitch:@"E4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[17] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[18] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[19] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[15] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[16] = [[Note alloc] initWithPitch:@"E4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[17] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[18] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[19] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
         /* Touch the Label to start */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
@@ -216,7 +216,7 @@
         return;
     
     gameOver = YES;
-    for (int i=0; i<16; i++)
+    for (int i=0; i<20; i++)
         [score[i] resetPlayed];
     [self removeAllActions];
     indicator.hidden = YES;

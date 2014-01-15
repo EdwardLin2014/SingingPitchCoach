@@ -9,7 +9,6 @@
 #import "test_3_Major_Scale.h"
 #import "TestingScene.h"
 
-
 @implementation test_3_Major_Scale
 
 -(id)initWithSize:(CGSize)size
@@ -70,7 +69,7 @@
         score[14] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
-        score[16] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[16] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         score[17] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         score[18] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         score[19] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
@@ -265,9 +264,7 @@
     exitLabel.fontColor = [SKColor yellowColor];
     [self addChild:exitLabel];
     
-    
     SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
-    
     [scorePointlabel runAction:labelScaleAction];
     [restartLabel runAction:labelScaleAction];
     [exitLabel runAction:labelScaleAction];

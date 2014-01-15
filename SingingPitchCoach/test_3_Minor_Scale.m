@@ -69,7 +69,7 @@
         score[14] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
-        score[16] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[16] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         score[17] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         score[18] = [[Note alloc] initWithPitch:@"G#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         score[19] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
