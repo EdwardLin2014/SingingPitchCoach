@@ -60,7 +60,7 @@
     NSUserDefaults *userDefaults;
     
     float sampleRate;                           // Fix this sample rate, as Human Pitch Range A0(27.5Hz) to B8(7900Hz)
-    int percentageOfOverlap;                    // in %, [0-100) Percentage of Frame overlap
+    long percentageOfOverlap;                    // in %, [0-100) Percentage of Frame overlap
     
     AUGraph processingGraph;                    // Audio Unit Processing Graph
 	AudioUnit ioUnit;                           // Microphone
@@ -80,7 +80,7 @@
     size_t bufferCapacity;                      // default: 2048 (bytes) as 2 bytes per sample
     
     UInt32 maxFrames;
-    int kBufferSize;
+    long kBufferSize;
 }
 
 /* Setup the singleton Detector */

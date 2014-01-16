@@ -52,7 +52,7 @@
     overlapTextField.borderStyle = UITextBorderStyleRoundedRect;
     overlapTextField.textColor = [UIColor blackColor];
     overlapTextField.font = [UIFont systemFontOfSize:14];
-    overlapTextField.text = [NSString stringWithFormat:@"%d",[userDefaults integerForKey:@"percentageOfOverlap"]];
+    overlapTextField.text = [NSString stringWithFormat:@"%ld",(long)[userDefaults integerForKey:@"percentageOfOverlap"]];
     overlapTextField.placeholder = @"Enter Percentage Of Frame Overlap (0-99)";
     overlapTextField.backgroundColor = [UIColor whiteColor];
     overlapTextField.autocorrectionType = UITextAutocorrectionTypeYes;
@@ -71,7 +71,7 @@
     frameSizeTextField.borderStyle = UITextBorderStyleRoundedRect;
     frameSizeTextField.textColor = [UIColor blackColor];
     frameSizeTextField.font = [UIFont systemFontOfSize:14];
-    frameSizeTextField.text = [NSString stringWithFormat:@"%d",[userDefaults integerForKey:@"kBufferSize"]];
+    frameSizeTextField.text = [NSString stringWithFormat:@"%ld",(long)[userDefaults integerForKey:@"kBufferSize"]];
     frameSizeTextField.placeholder = @"Enter 4096, 8192, 16384";
     frameSizeTextField.backgroundColor = [UIColor whiteColor];
     frameSizeTextField.autocorrectionType = UITextAutocorrectionTypeYes;
@@ -90,7 +90,7 @@
     tempoTextField.borderStyle = UITextBorderStyleRoundedRect;
     tempoTextField.textColor = [UIColor blackColor];
     tempoTextField.font = [UIFont systemFontOfSize:14];
-    tempoTextField.text = [NSString stringWithFormat:@"%d",[userDefaults integerForKey:@"tempo"]];
+    tempoTextField.text = [NSString stringWithFormat:@"%ld",(long)[userDefaults integerForKey:@"tempo"]];
     tempoTextField.placeholder = @"Enter 120";
     tempoTextField.backgroundColor = [UIColor whiteColor];
     tempoTextField.autocorrectionType = UITextAutocorrectionTypeYes;

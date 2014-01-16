@@ -64,7 +64,7 @@
     SKLabelNode *readyLabel;
     SKLabelNode *goLabel;
     
-    AVPlayer *audioPlayer;
+    AVPlayer *audioPlayer[10];
     
     SKLabelNode *performanceScoreLabel;
     SKShapeNode *filledCircle;

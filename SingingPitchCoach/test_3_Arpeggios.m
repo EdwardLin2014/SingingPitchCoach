@@ -71,6 +71,29 @@
         score[14] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
+        NSString *soundFilePath;
+        NSURL *fileURL;
+        for(int i=0; i<6; i++)
+        {
+            switch (i)
+            {
+                case 0:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"F3_4" ofType: @"wav"];       break;
+                case 1:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"A3_4" ofType: @"wav"];       break;
+                case 2:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"C4_4" ofType: @"wav"];       break;
+                case 3:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"F4_4" ofType: @"wav"];       break;
+                case 4:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"ready" ofType: @"wav"];      break;
+                case 5:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"go" ofType: @"wav"];         break;
+            }
+            
+            fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
+            audioPlayer[i] = [[AVPlayer alloc] initWithURL:fileURL];
+            [audioPlayer[i] setVolume:0.1];
+            [audioPlayer[i] setRate:tempoRate/120];
+            
+            // NOTE: MUST PAUSE! Otherwise they all start to play! But why!?
+            [audioPlayer[i] pause];
+        }
+        
         /* Touch the Label to start */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
         instructionLabel1.name = @"instructionLabel1";
@@ -266,14 +289,12 @@
 
 -(void)playSound:(NSString *)fileName
 {
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType: @"wav"];
-    NSURL *fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
-    
-    audioPlayer = [[AVPlayer alloc] initWithURL:fileURL];
-    [audioPlayer setVolume:0.1];
-    [audioPlayer setRate:tempoRate/120];
-    
-    [audioPlayer play];
+    if ([fileName isEqualToString:@"F3_4"])           { [audioPlayer[0] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[0] play]; }
+    else if ([fileName isEqualToString:@"A3_4"])      { [audioPlayer[1] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[1] play]; }
+    else if ([fileName isEqualToString:@"C4_4"])      { [audioPlayer[2] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[2] play]; }
+    else if ([fileName isEqualToString:@"F4_4"])      { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
+    else if ([fileName isEqualToString:@"ready"])     { [audioPlayer[4] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[4] play]; }
+    else if ([fileName isEqualToString:@"go"])        { [audioPlayer[5] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[5] play]; }
 }
 
 -(void)playNote:(Note *)note isLastNote:(bool)isLastNote;

@@ -42,11 +42,11 @@
         /* Add background - End */
         
         /* start the mic */
+        userDefaults = [NSUserDefaults standardUserDefaults];
         pitchDetector = [PitchDetector sharedDetector];
         [pitchDetector TurnOnMicrophone_test_4_My_Heart_Will_Go_On:self];
         
         /* Calculate Animation Speed */
-        userDefaults = [NSUserDefaults standardUserDefaults];
         tempoRate = 7.5*60/[userDefaults integerForKey:@"tempo"];
         animationSpeed = tempoRate*710.5/458;
         
@@ -94,6 +94,46 @@
         score[39] = [[Note alloc] initWithPitch:@"D4" AndTempoRate:tempoRate AndDuration:@"half" AndPlayDemo:NO];
         score[40] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"half" AndPlayDemo:NO];
         score[41] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"full" AndPlayDemo:NO];
+        
+        NSString *soundFilePath;
+        NSURL *fileURL;
+        for(int i=0; i<23; i++)
+        {
+            switch (i)
+            {
+                case 0:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"01_once" ofType: @"wav"];      break;
+                case 1:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"02_more" ofType: @"wav"];      break;
+                case 2:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"03_you" ofType: @"wav"];       break;
+                case 3:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"04_o" ofType: @"wav"];         break;
+                case 4:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"05_pen" ofType: @"wav"];       break;
+                case 5:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"06_the" ofType: @"wav"];       break;
+                case 6:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"07_door" ofType: @"wav"];      break;
+                case 7:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"08_and" ofType: @"wav"];       break;
+                case 8:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"09_youre" ofType: @"wav"];     break;
+                case 9:         soundFilePath = [[NSBundle mainBundle] pathForResource:@"10_here" ofType: @"wav"];      break;
+                case 10:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"11_in" ofType: @"wav"];        break;
+                case 11:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"12_my" ofType: @"wav"];        break;
+                case 12:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"13_heart" ofType: @"wav"];     break;
+                case 13:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"14_and" ofType: @"wav"];       break;
+                case 14:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"15_my" ofType: @"wav"];        break;
+                case 15:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"16_heart" ofType: @"wav"];     break;
+                case 16:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"17_will" ofType: @"wav"];      break;
+                case 17:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"18_go" ofType: @"wav"];        break;
+                case 18:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"19_on" ofType: @"wav"];        break;
+                case 19:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"20_and" ofType: @"wav"];       break;
+                case 20:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"21_M_on" ofType: @"wav"];      break;
+                case 21:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"ready" ofType: @"wav"];        break;
+                case 22:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"go" ofType: @"wav"];           break;
+            }
+            
+            fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
+            audioPlayer[i] = [[AVPlayer alloc] initWithURL:fileURL];
+            [audioPlayer[i] setVolume:0.1];
+            [audioPlayer[i] setRate:tempoRate/120];
+            
+            // NOTE: MUST PAUSE! Otherwise they all start to play! But why!?
+            [audioPlayer[i] pause];
+        }
         
         /* Touch the Label to start */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
@@ -268,14 +308,29 @@
 
 -(void)playSound:(NSString *)fileName
 {
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType: @"wav"];
-    NSURL *fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
-    
-    audioPlayer = [[AVPlayer alloc] initWithURL:fileURL];
-    [audioPlayer setVolume:0.1];
-    [audioPlayer setRate:tempoRate/120];
-    
-    [audioPlayer play];
+    if ([fileName isEqualToString:@"01_once"])           { [audioPlayer[0] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[0] play]; }
+    else if ([fileName isEqualToString:@"02_more"])      { [audioPlayer[1] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[1] play]; }
+    else if ([fileName isEqualToString:@"03_you"])       { [audioPlayer[2] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[2] play]; }
+    else if ([fileName isEqualToString:@"04_o"])         { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
+    else if ([fileName isEqualToString:@"05_pen"])       { [audioPlayer[4] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[4] play]; }
+    else if ([fileName isEqualToString:@"06_the"])       { [audioPlayer[5] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[5] play]; }
+    else if ([fileName isEqualToString:@"07_door"])      { [audioPlayer[6] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[6] play]; }
+    else if ([fileName isEqualToString:@"08_and"])       { [audioPlayer[7] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[7] play]; }
+    else if ([fileName isEqualToString:@"09_youre"])     { [audioPlayer[8] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[8] play]; }
+    else if ([fileName isEqualToString:@"10_here"])      { [audioPlayer[9] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[9] play]; }
+    else if ([fileName isEqualToString:@"11_in"])        { [audioPlayer[10] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[10] play]; }
+    else if ([fileName isEqualToString:@"12_my"])        { [audioPlayer[11] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[11] play]; }
+    else if ([fileName isEqualToString:@"13_heart"])     { [audioPlayer[12] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[12] play]; }
+    else if ([fileName isEqualToString:@"14_and"])       { [audioPlayer[13] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[13] play]; }
+    else if ([fileName isEqualToString:@"15_my"])        { [audioPlayer[14] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[14] play]; }
+    else if ([fileName isEqualToString:@"16_heart"])     { [audioPlayer[15] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[15] play]; }
+    else if ([fileName isEqualToString:@"17_will"])      { [audioPlayer[16] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[16] play]; }
+    else if ([fileName isEqualToString:@"18_go"])        { [audioPlayer[17] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[17] play]; }
+    else if ([fileName isEqualToString:@"19_on"])        { [audioPlayer[18] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[18] play]; }
+    else if ([fileName isEqualToString:@"20_and"])       { [audioPlayer[19] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[19] play]; }
+    else if ([fileName isEqualToString:@"21_M_on"])      { [audioPlayer[20] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[20] play]; }
+    else if ([fileName isEqualToString:@"ready"])        { [audioPlayer[21] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[21] play]; }
+    else if ([fileName isEqualToString:@"go"])           { [audioPlayer[22] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[22] play]; }
 }
 
 -(void)playNote:(Note *)note isLastNote:(bool)isLastNote;
@@ -559,7 +614,7 @@
                 default:        NSLog(@"cannot find the duration?");        break;
             }
             
-            NSLog(@"sound clip chosen: %@", tmp);
+//            NSLog(@"sound clip chosen: %@", tmp);
             
             [self playSound:tmp];
         }

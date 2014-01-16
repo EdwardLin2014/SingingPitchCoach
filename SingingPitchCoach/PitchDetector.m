@@ -385,9 +385,9 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
 	void *dataBuffer = THIS->dataBuffer;
 	float *outputBuffer = THIS->outputBuffer;
 	SInt16 index = THIS->index;
-    int bufferCapacity = THIS->bufferCapacity;
+    size_t bufferCapacity = THIS->bufferCapacity;
     float sampleRate = THIS->sampleRate;
-    int percentageOfOverlap = THIS->percentageOfOverlap;
+    long percentageOfOverlap = THIS->percentageOfOverlap;
 	
 	AudioUnit rioUnit = THIS->ioUnit;
 	OSStatus renderErr;
@@ -414,7 +414,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
 	
 	// Fill the buffer with our sampled data. If we fill our buffer, run the fft.
     // index is always smaller than the bufferCapacity
-	int read = bufferCapacity - index;
+	long read = bufferCapacity - index;
 	if (read > inNumberFrames)
     {
 		memcpy((SInt16 *)dataBuffer + index, THIS->bufferList->mBuffers[0].mData, inNumberFrames*sizeof(SInt16));
@@ -502,7 +502,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
         midiNum = [THIS freqToMIDI:frequency];
         pitch = [THIS midiToPitch:midiNum];
         
-        NSLog(@"%f %f %d %d %@", runningTime, frequency, bin, midiNum, pitch);
+//        NSLog(@"%f %f %d %d %@", runningTime, frequency, bin, midiNum, pitch);
         
         if(UI != nil)                                   [UI moveIndicatorByMIDI:midiNum];
         if(test_1_4096_0UI != nil)                      [test_1_4096_0UI moveIndicatorByMIDI:midiNum];

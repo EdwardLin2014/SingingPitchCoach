@@ -107,7 +107,7 @@
         score1[7] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"eighth" AndPlayDemo:NO];
         */
         
-        NSLog(@"tempo: %d", [userDefaults integerForKey:@"tempo"]);
+        NSLog(@"tempo: %ld", (long)[userDefaults integerForKey:@"tempo"]);
         NSLog(@"animationSpeed: %f", animationSpeed);
 
         [self startTheGame];
