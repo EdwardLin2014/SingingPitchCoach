@@ -675,7 +675,14 @@
         {
             totalScorePoint++;
             if ([self isScorePoint:[score[i] getPitch]])
+            {
                 scorePoint++;
+                
+                SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction fadeInWithDuration:0.1]]];
+                //                SKAction *blink = [SKAction sequence:@[[SKAction fadeAlphaTo:0 duration:0.1],[SKAction fadeAlphaTo:1 duration:0.1]]];
+                SKAction *blinkForTime = [SKAction repeatAction:blink count:5];
+                [[score[i] getUI] runAction:blinkForTime];
+            }
         }
     }
     /* ------------------------------------------ Calculate your Score ------------------------------------------ End */
