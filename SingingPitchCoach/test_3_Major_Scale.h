@@ -67,6 +67,14 @@
     
     SKLabelNode *performanceScoreLabel;
     SKShapeNode *filledCircle;
+    
+    SKSpriteNode *pianoRoll;
+    bool displayDot;
+    SKLabelNode *displayDotLabel;
+    
+    SKSpriteNode *scoreBK;
+    bool shimmerGreenBar;
+    SKLabelNode *shimmerGBLabel;
 }
 
 // Indicator Movement

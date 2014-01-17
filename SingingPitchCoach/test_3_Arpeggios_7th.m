@@ -20,20 +20,24 @@
         
         SKTextureAtlas *backgroundAtlas = [SKTextureAtlas atlasNamed:@"background"];
         
-        SKSpriteNode *scoreBK = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5Score"]];
+        scoreBK = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5Score"]];
+        scoreBK.name = @"C3C5Score";
         scoreBK.position = CGPointMake(315, (CGRectGetMidY(self.frame)-10));
         scoreBK.zPosition = 0;
         [self addChild:scoreBK];
+        shimmerGreenBar = YES;
         
         scoreLine = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"ScoreLine"]];
         scoreLine.position = CGPointMake(84, (CGRectGetMidY(self.frame)-10));
         scoreLine.zPosition = 1;
         [self addChild:scoreLine];
         
-        SKSpriteNode *pianoRoll = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5PianoRoll"]];
+        pianoRoll = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"C3C5PianoRoll"]];
+        pianoRoll.name = @"C3C5PianoRoll";
         pianoRoll.position = CGPointMake(43, (CGRectGetMidY(self.frame)-10));
         pianoRoll.zPosition = 3;
         [self addChild:pianoRoll];
+        displayDot = YES;
         
         indicator = [SKSpriteNode spriteNodeWithTexture:[backgroundAtlas textureNamed:@"indicator"]];
         indicator.position = CGPointMake(15, -8);
@@ -129,6 +133,7 @@
         [instructionLabel2 runAction:labelScaleAction];
         [instructionLabel3 runAction:labelScaleAction];
         
+        /* Reinforcement Feature Label */
         performanceScoreLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
         performanceScoreLabel.name = @"performanceScore";
         performanceScoreLabel.text = @"Score: 0.00%";
@@ -137,6 +142,20 @@
         performanceScoreLabel.fontColor = [SKColor redColor];
         [self addChild:performanceScoreLabel];
 
+        displayDotLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+        displayDotLabel.text = [NSString stringWithFormat:@"Display Dot: %@", ((displayDot==YES)?@"YES":@" NO")];
+        displayDotLabel.fontSize = 25;
+        displayDotLabel.position = CGPointMake(295, CGRectGetMaxY(self.frame)-20);
+        displayDotLabel.fontColor = [SKColor redColor];
+        [self addChild:displayDotLabel];
+        
+        shimmerGBLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+        shimmerGBLabel.text = [NSString stringWithFormat:@"Shimmer Bar: %@", ((shimmerGreenBar==YES)?@"YES":@" NO")];
+        shimmerGBLabel.fontSize = 25;
+        shimmerGBLabel.position = CGPointMake(475, CGRectGetMaxY(self.frame)-20);
+        shimmerGBLabel.fontColor = [SKColor redColor];
+        [self addChild:shimmerGBLabel];
+        
         filledCircle = [[SKShapeNode alloc]init];
         UIBezierPath *circlePath = [[UIBezierPath alloc] init];
         [circlePath moveToPoint:CGPointMake(0.0, 0.0)];
@@ -408,6 +427,39 @@
             return;
         }
         
+        if(n!=self && [n.name isEqual: @"performanceScore"])
+        {
+            if([performanceScoreLabel isHidden])
+                performanceScoreLabel.hidden = NO;
+            else
+                performanceScoreLabel.hidden = YES;
+            return;
+        }
+        
+        if(n!=self && [n.name isEqual: @"C3C5PianoRoll"])
+        {
+            if(displayDot == YES)
+                displayDot = NO;
+            else
+                displayDot = YES;
+            
+            displayDotLabel.text = [NSString stringWithFormat:@"Display Dot: %@", ((displayDot==YES)?@"YES":@" NO")];
+            
+            return;
+        }
+        
+        if(n!=self && [n.name isEqual: @"C3C5Score"])
+        {
+            if(shimmerGreenBar == YES)
+                shimmerGreenBar = NO;
+            else
+                shimmerGreenBar = YES;
+            
+            shimmerGBLabel.text = [NSString stringWithFormat:@"Shimmer Bar: %@", ((shimmerGreenBar==YES)?@"YES":@" NO")];
+            
+            return;
+        }
+        
         if(n!=self && ([n.name isEqual: @"exitLabel"]||[n.name isEqual: @"instructionLabel3"]))
         {
             indicator.hidden = YES;
@@ -588,20 +640,33 @@
             {
                 scorePoint++;
                 
-                SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction fadeInWithDuration:0.1]]];
-                //                SKAction *blink = [SKAction sequence:@[[SKAction fadeAlphaTo:0 duration:0.1],[SKAction fadeAlphaTo:1 duration:0.1]]];
-                SKAction *blinkForTime = [SKAction repeatAction:blink count:5];
-                [[score[i] getUI] runAction:blinkForTime];
+                if (shimmerGreenBar == YES)
+                {
+                    SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction fadeInWithDuration:0.1]]];
+//                SKAction *blink = [SKAction sequence:@[[SKAction fadeAlphaTo:0 duration:0.1],[SKAction fadeAlphaTo:1 duration:0.1]]];
+                    SKAction *blinkForTime = [SKAction repeatAction:blink count:5];
+                    [[score[i] getUI] runAction:blinkForTime];
+                }
                 
-                filledCircle.hidden = NO;
-                filledCircle.fillColor = [SKColor blueColor];
-                filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+                if (displayDot == YES)
+                {
+                    filledCircle.hidden = NO;
+                    filledCircle.fillColor = [SKColor blueColor];
+                    filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+                }
+                else
+                    filledCircle.hidden = YES;
             }
             else
             {
-                filledCircle.hidden = NO;
-                filledCircle.fillColor = [SKColor redColor];
-                filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+                if (displayDot == YES)
+                {
+                    filledCircle.hidden = NO;
+                    filledCircle.fillColor = [SKColor redColor];
+                    filledCircle.position = CGPointMake(85, [self pitchToPosition: [score[i] getPitch]]);
+                }
+                else
+                    filledCircle.hidden = YES;
             }
         }
     }

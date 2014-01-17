@@ -21,6 +21,8 @@
 {
     [super viewWillLayoutSubviews];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone] ;
+    
     // Configure the view.
     // Configure the view after it has been sized for the correct orientation.
     SKView * skView = (SKView *)self.view;
