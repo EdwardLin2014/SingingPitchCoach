@@ -486,7 +486,7 @@ OSStatus AudioAnalysisCallback (void                        *inRefCon,
         
         dominantAMP = 0;
         bin = -1;
-        for(i=0; i<nOver2; i++)
+        for(i=12; i<nOver2; i++)
         {
             curAMP = sqrt(absFFTFloat[i]) * sqrt(absCepstrumFloat[i]);
             if (curAMP > dominantAMP)
