@@ -15,6 +15,9 @@
 {
     if (self = [super initWithSize:size])
     {
+        /* testing */
+        int a = 0;
+        
         /* Add background - Begin */
         self.backgroundColor = [SKColor whiteColor];
         
