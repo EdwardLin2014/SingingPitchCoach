@@ -1,16 +1,13 @@
 //
-//  test_1_16384_0.m
+//  test_1_4096_50.m
 //  SingingPitchCoach
 //
 //  Created by Edward on 14/1/14.
 //  Copyright (c) 2014 Edward. All rights reserved.
 //
+#import "test_1_4096_50.h"
 
-#import "test_1_16384_0.h"
-#import "TestingScene.h"
-#import "PitchDetector.h"
-
-@implementation test_1_16384_0
+@implementation test_1_4096_50
 
 -(id)initWithSize:(CGSize)size
 {
@@ -18,8 +15,8 @@
     {
         userDefaults = [NSUserDefaults standardUserDefaults];
 
-        [userDefaults setInteger:16384 forKey:@"kBufferSize"];
-        [userDefaults setInteger:0 forKey:@"percentageOfOverlap"];
+        [userDefaults setInteger:4096 forKey:@"kBufferSize"];
+        [userDefaults setInteger:50 forKey:@"percentageOfOverlap"];
         [userDefaults synchronize];
         
         /* Add background - Begin */
@@ -45,13 +42,20 @@
         /* Add background - End */
         
         /* start the mic */
-        pitchDetector = [PitchDetector sharedDetector];
-        [pitchDetector TurnOnMicrophone_test_1_16384_0:self];
+        _audioController = [[AudioController alloc] init:44100 FrameSize:4096];
+        _bufferManager = [_audioController getBufferManagerInstance];
+        _l_fftData = (Float32*) calloc(4096, sizeof(Float32));
+        _l_cepstrumData = (Float32*) calloc(4096, sizeof(Float32));
+        _l_fftcepstrumData = (Float32*) calloc(4096, sizeof(Float32));
+        _Hz120 = floor(120*(float)4096/(float)44100);
+        _Hz530 = floor(530*(float)4096/(float)44100);
+        /* Turn on the microphone */
+        [_audioController startIOUnit];
         
         /* Touch the Label to exit */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
         instructionLabel1.name = @"instructionLabel1";
-        instructionLabel1.text = @"1_16384_0";
+        instructionLabel1.text = @"1_4096_50";
         instructionLabel1.scale = 0.5;
         instructionLabel1.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.6);
         instructionLabel1.fontColor = [SKColor yellowColor];
@@ -77,12 +81,47 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     indicator.hidden = YES;
-    
+ 
     /* stop the mic */
-    [pitchDetector TurnOffMicrophone];
+    //[pitchDetector TurnOffMicrophone];
+    [_audioController stopIOUnit];
+    _audioController = NULL;
+    _bufferManager = NULL;
     
     TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
     [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
+}
+
+-(void)update:(CFTimeInterval)currentTime
+{
+    if (_bufferManager != NULL)
+    {
+        if(_bufferManager->HasNewFFTData())
+        {
+            [_audioController GetFFTOutput:_l_fftData];
+            _bufferManager->GetCepstrumOutput(_l_fftData, _l_cepstrumData);
+            _bufferManager->GetFFTCepstrumOutput(_l_fftData, _l_cepstrumData, _l_fftcepstrumData);
+            
+            _maxAmp = -INFINITY;
+            _bin = _Hz120;
+            for (int i=_Hz120; i<=_Hz530; i++)
+            {
+                _curAmp = _l_fftcepstrumData[i];
+                if (_curAmp > _maxAmp)
+                {
+                    _maxAmp = _curAmp;
+                    _bin = i;
+                }
+            }
+            
+            _frequency = _bin*((float)44100/(float)4096);
+            _midiNum = [_audioController freqToMIDI:_frequency];
+            _pitch = [_audioController midiToPitch:_midiNum];
+            //NSLog(@"Current: %.12f %d %.12f %@", _frequency, _bin, _midiNum, _pitch);
+            
+            [self moveIndicatorByMIDI:(int)round((double)_midiNum)];
+        }
+    }
 }
 
 -(int)midiToPosition:(int)midi

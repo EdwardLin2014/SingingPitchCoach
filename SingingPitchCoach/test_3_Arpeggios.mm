@@ -1,15 +1,13 @@
 //
-//  test_3_Minor_Scale.m
+//  test_3_Arpeggios.m
 //  SingingPitchCoach
 //
 //  Created by Edward on 14/1/14.
 //  Copyright (c) 2014 Edward. All rights reserved.
 //
+#import "test_3_Arpeggios.h"
 
-#import "test_3_Minor_Scale.h"
-#import "TestingScene.h"
-
-@implementation test_3_Minor_Scale
+@implementation test_3_Arpeggios
 
 -(id)initWithSize:(CGSize)size
 {
@@ -45,68 +43,56 @@
         [self addChild:indicator];
         /* Add background - End */
         
-        /* start the mic */
-        pitchDetector = [PitchDetector sharedDetector];
-        [pitchDetector TurnOnMicrophone_test_3_Minor_Scale:self];
-        
         /* Calculate Animation Speed */
         userDefaults = [NSUserDefaults standardUserDefaults];
         tempoRate = 7.5*60/[userDefaults integerForKey:@"tempo"];
         animationSpeed = tempoRate*710.5/458;
         
+        /* start the mic */
+        _frameSize = (UInt32)[userDefaults integerForKey:@"kBufferSize"];
+        _audioController = [[AudioController alloc] init:44100 FrameSize:_frameSize];
+        _bufferManager = [_audioController getBufferManagerInstance];
+        _l_fftData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _l_cepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _l_fftcepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _Hz120 = floor(120*(float)_frameSize/(float)44100);
+        _Hz530 = floor(530*(float)_frameSize/(float)44100);
+        /* Turn on the microphone */
+        [_audioController startIOUnit];
+        
         /* Initialise Score Notes */
         score[0] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[1] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[2] = [[Note alloc] initWithPitch:@"G#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[3] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[4] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[5] = [[Note alloc] initWithPitch:@"C#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[6] = [[Note alloc] initWithPitch:@"D#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[7] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[1] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[2] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[3] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
-        score[8] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[9] = [[Note alloc] initWithPitch:@"D#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[10] = [[Note alloc] initWithPitch:@"C#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[11] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[12] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[13] = [[Note alloc] initWithPitch:@"G#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[14] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[4] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[5] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[6] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[7] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
         
-        score[16] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
-        score[17] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[18] = [[Note alloc] initWithPitch:@"G#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[19] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[20] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[21] = [[Note alloc] initWithPitch:@"C#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[22] = [[Note alloc] initWithPitch:@"D#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[23] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[8] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
+        score[9] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[10] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[11] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
-        score[24] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[25] = [[Note alloc] initWithPitch:@"D#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[26] = [[Note alloc] initWithPitch:@"C#4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[27] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[28] = [[Note alloc] initWithPitch:@"A#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[29] = [[Note alloc] initWithPitch:@"G#3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[30] = [[Note alloc] initWithPitch:@"G3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
-        score[31] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[12] = [[Note alloc] initWithPitch:@"F4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[13] = [[Note alloc] initWithPitch:@"C4" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[14] = [[Note alloc] initWithPitch:@"A3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
+        score[15] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:NO];
         
         NSString *soundFilePath;
         NSURL *fileURL;
-        for(int i=0; i<10; i++)
+        for(int i=0; i<6; i++)
         {
             switch (i)
             {
                 case 0:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"F3_4" ofType: @"wav"];       break;
-                case 1:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"G3_4" ofType: @"wav"];       break;
-                case 2:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"G#3_4" ofType: @"wav"];       break;
-                case 3:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"A#3_4" ofType: @"wav"];      break;
-                case 4:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"C4_4" ofType: @"wav"];       break;
-                case 5:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"C#4_4" ofType: @"wav"];       break;
-                case 6:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"D#4_4" ofType: @"wav"];       break;
-                case 7:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"F4_4" ofType: @"wav"];       break;
-                case 8:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"ready" ofType: @"wav"];      break;
-                case 9:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"go" ofType: @"wav"];         break;
+                case 1:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"A3_4" ofType: @"wav"];       break;
+                case 2:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"C4_4" ofType: @"wav"];       break;
+                case 3:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"F4_4" ofType: @"wav"];       break;
+                case 4:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"ready" ofType: @"wav"];      break;
+                case 5:        soundFilePath = [[NSBundle mainBundle] pathForResource:@"go" ofType: @"wav"];         break;
             }
             
             fileURL = [[NSURL alloc] initFileURLWithPath: soundFilePath];
@@ -121,7 +107,7 @@
         /* Touch the Label to start */
         instructionLabel1 = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
         instructionLabel1.name = @"instructionLabel1";
-        instructionLabel1.text = @"3_Minor_Scale";
+        instructionLabel1.text = @"3_Arpeggios";
         instructionLabel1.scale = 0.5;
         instructionLabel1.position = CGPointMake(self.frame.size.width/2+33, self.frame.size.height*0.6);
         instructionLabel1.fontColor = [SKColor yellowColor];
@@ -282,7 +268,7 @@
         return;
     
     gameOver = YES;
-    for (int i=0; i<32; i++)
+    for (int i=0; i<16; i++)
         [score[i] resetPlayed];
     [self removeAllActions];
     indicator.hidden = YES;
@@ -290,7 +276,7 @@
     
     /* Your Score */
     performanceScorePoint = scorePoint / totalScorePoint * 100;
-    
+        
     SKLabelNode *scorePointlabel;
     scorePointlabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondenseMedium"];
     scorePointlabel.name = @"scorePointLabel";
@@ -329,15 +315,11 @@
 -(void)playSound:(NSString *)fileName
 {
     if ([fileName isEqualToString:@"F3_4"])           { [audioPlayer[0] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[0] play]; }
-    else if ([fileName isEqualToString:@"G3_4"])      { [audioPlayer[1] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[1] play]; }
-    else if ([fileName isEqualToString:@"G#3_4"])     { [audioPlayer[2] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[2] play]; }
-    else if ([fileName isEqualToString:@"A#3_4"])     { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
-    else if ([fileName isEqualToString:@"C4_4"])      { [audioPlayer[4] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[4] play]; }
-    else if ([fileName isEqualToString:@"C#4_4"])     { [audioPlayer[5] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[5] play]; }
-    else if ([fileName isEqualToString:@"D#4_4"])     { [audioPlayer[6] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[6] play]; }
-    else if ([fileName isEqualToString:@"F4_4"])      { [audioPlayer[7] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[7] play]; }
-    else if ([fileName isEqualToString:@"ready"])     { [audioPlayer[8] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[8] play]; }
-    else if ([fileName isEqualToString:@"go"])        { [audioPlayer[9] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[9] play]; }
+    else if ([fileName isEqualToString:@"A3_4"])      { [audioPlayer[1] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[1] play]; }
+    else if ([fileName isEqualToString:@"C4_4"])      { [audioPlayer[2] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[2] play]; }
+    else if ([fileName isEqualToString:@"F4_4"])      { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
+    else if ([fileName isEqualToString:@"ready"])     { [audioPlayer[4] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[4] play]; }
+    else if ([fileName isEqualToString:@"go"])        { [audioPlayer[5] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[5] play]; }
 }
 
 -(void)playNote:(Note *)note isLastNote:(bool)isLastNote;
@@ -486,7 +468,10 @@
             indicator.hidden = YES;
             
             /* stop the mic */
-            [pitchDetector TurnOffMicrophone];
+            //[pitchDetector TurnOffMicrophone];
+            [_audioController stopIOUnit];
+            _audioController = NULL;
+            _bufferManager = NULL;
             
             TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
             [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
@@ -538,12 +523,12 @@
         
         notePos++;
     }
-    else if(notePos<16 && currentTime >= nextNoteTime)
+    else if(notePos<8 && currentTime >= nextNoteTime)
     {
         if (notePos == 0)
             [goLabel removeFromParent];
         
-        if (notePos == 15)
+        if (notePos == 7)
             nextNoteTime = currentTime + [score[notePos] getDurationInTime] + 5;
         else
             nextNoteTime = currentTime + [score[notePos] getDurationInTime];
@@ -552,7 +537,7 @@
         
         notePos++;
     }
-    else if(notePos == 16 && currentTime >= nextNoteTime)
+    else if(notePos == 8 && currentTime >= nextNoteTime)
     {
         nextNoteTime = currentTime + 2;
         
@@ -570,7 +555,7 @@
         
         notePos++;
     }
-    else if(notePos == 17 && currentTime >= nextNoteTime)
+    else if(notePos == 9 && currentTime >= nextNoteTime)
     {
         nextNoteTime = currentTime + 0.5;
         
@@ -590,14 +575,14 @@
         
         notePos++;
     }
-    else if(notePos<34 && currentTime >= nextNoteTime)
+    else if(notePos<18 && currentTime >= nextNoteTime)
     {
-        if (notePos == 18)
+        if (notePos == 10)
             [goLabel removeFromParent];
         
         nextNoteTime = currentTime + [score[notePos-2] getDurationInTime];
         
-        if (notePos == 33)
+        if (notePos == 17)
             [self playNote:score[notePos-2] isLastNote:YES];
         else
             [self playNote:score[notePos-2] isLastNote:NO];
@@ -608,7 +593,7 @@
     /* ------------------------------------------ Play Score ------------------------------------------ End */
     
     /* ------------------------------------------ Play Demo ------------------------------------------ Begin */
-    for (int i=0; i<16; i++)
+    for (int i=0; i<8; i++)
     {
         if ([[score[i] getUI] intersectsNode:scoreLine] && ![score[i] isPlayed] && ![score[i] getUI].hidden)
         {
@@ -632,18 +617,18 @@
             [self playSound:tmp];
         }
     }
-    if ([[score[16] getUI] intersectsNode:scoreLine] && ![score[16] isPlayed] && ![score[16] getUI].hidden)
+    if ([[score[8] getUI] intersectsNode:scoreLine] && ![score[8] isPlayed] && ![score[8] getUI].hidden)
     {
-        [score[16] play];
+        [score[8] play];
         
-        NSString *tmp = [score[16] getPitch];
-        if ([[score[16] getDurationInString] isEqualToString:@"eighth"])
+        NSString *tmp = [score[8] getPitch];
+        if ([[score[8] getDurationInString] isEqualToString:@"eighth"])
             tmp = [tmp stringByAppendingString:@"_8"];
-        else if ([[score[16] getDurationInString] isEqualToString:@"quarter"])
+        else if ([[score[8] getDurationInString] isEqualToString:@"quarter"])
             tmp = [tmp stringByAppendingString:@"_4"];
-        else if ([[score[16] getDurationInString] isEqualToString:@"half"])
+        else if ([[score[8] getDurationInString] isEqualToString:@"half"])
             tmp = [tmp stringByAppendingString:@"_2"];
-        else if ([[score[16] getDurationInString] isEqualToString:@"full"])
+        else if ([[score[8] getDurationInString] isEqualToString:@"full"])
             tmp = [tmp stringByAppendingString:@"_1"];
         else
             NSLog(@"cannot find the duration?");
@@ -652,8 +637,39 @@
     }
     /* ------------------------------------------ Play Demo ------------------------------------------ End */
     
+    /* ------------------------------------------ Estimate your Pitch ------------------------------------------ Begin */
+    if (_bufferManager != NULL)
+    {
+        if(_bufferManager->HasNewFFTData())
+        {
+            [_audioController GetFFTOutput:_l_fftData];
+            _bufferManager->GetCepstrumOutput(_l_fftData, _l_cepstrumData);
+            _bufferManager->GetFFTCepstrumOutput(_l_fftData, _l_cepstrumData, _l_fftcepstrumData);
+            
+            _maxAmp = -INFINITY;
+            _bin = _Hz120;
+            for (int i=_Hz120; i<=_Hz530; i++)
+            {
+                _curAmp = _l_fftcepstrumData[i];
+                if (_curAmp > _maxAmp)
+                {
+                    _maxAmp = _curAmp;
+                    _bin = i;
+                }
+            }
+            
+            _frequency = _bin*((float)44100/(float)_frameSize);
+            _midiNum = [_audioController freqToMIDI:_frequency];
+            _pitch = [_audioController midiToPitch:_midiNum];
+            //NSLog(@"Current: %.12f %d %.12f %@", _frequency, _bin, _midiNum, _pitch);
+            
+            [self moveIndicatorByMIDI:(int)round((double)_midiNum)];
+        }
+    }
+    /* ------------------------------------------ Estimate your Pitch ------------------------------------------ End */
+    
     /* ------------------------------------------ Calculate your Score ------------------------------------------ Begin */
-    for (int i=16; i<32; i++)
+    for (int i=8; i<16; i++)
     {
         if ([[score[i] getUI] intersectsNode:scoreLine] && ![score[i] getUI].hidden)
         {
@@ -669,7 +685,7 @@
                     SKAction *blinkForTime = [SKAction repeatAction:blink count:5];
                     [[score[i] getUI] runAction:blinkForTime];
                 }
-
+                
                 if (displayDot == YES)
                 {
                     filledCircle.hidden = NO;
@@ -703,6 +719,4 @@
     /* ------------------------------------------ Calculate your Score ------------------------------------------ End */
 }
 
-
 @end
-

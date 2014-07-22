@@ -5,9 +5,12 @@
 //  Created by Edward on 14/1/14.
 //  Copyright (c) 2014 Edward. All rights reserved.
 //
-@import AVFoundation;
 #import <SpriteKit/SpriteKit.h>
+#import <CoreMedia/CoreMedia.h>
 #import "Note.h"
+#import "AudioController.h"
+#import "BufferManager.h"
+#import "TestingScene.h"
 
 // Pitch's y position
 #define C5_y        294.5
@@ -36,10 +39,23 @@
 #define CSharp3_y   18.5
 #define C3_y        6
 
-@class PitchDetector;
 @interface test_3_Major_Scale : SKScene
 {
-    PitchDetector *pitchDetector;
+    AudioController*    _audioController;
+    BufferManager*      _bufferManager;
+    Float32*            _l_fftData;
+    Float32*            _l_cepstrumData;
+    Float32*            _l_fftcepstrumData;
+    UInt32              _Hz120;
+    UInt32              _Hz530;
+    Float32             _maxAmp;
+    int                 _bin;
+    Float32             _curAmp;
+    Float32             _frequency;
+    Float32             _midiNum;
+    NSString*           _pitch;
+    UInt32              _frameSize;
+    
     SKSpriteNode *indicator;
     SKSpriteNode* scoreLine;
     

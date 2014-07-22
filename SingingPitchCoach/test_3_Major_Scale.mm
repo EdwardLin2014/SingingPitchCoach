@@ -5,9 +5,7 @@
 //  Created by Edward on 14/1/14.
 //  Copyright (c) 2014 Edward. All rights reserved.
 //
-
 #import "test_3_Major_Scale.h"
-#import "TestingScene.h"
 
 @implementation test_3_Major_Scale
 
@@ -45,14 +43,22 @@
         [self addChild:indicator];
         /* Add background - End */
         
-        /* start the mic */
-        pitchDetector = [PitchDetector sharedDetector];
-        [pitchDetector TurnOnMicrophone_test_3_Major_Scale:self];
-        
         /* Calculate Animation Speed */
         userDefaults = [NSUserDefaults standardUserDefaults];
         tempoRate = 7.5*60/[userDefaults integerForKey:@"tempo"];
         animationSpeed = tempoRate*710.5/458;
+        
+        /* start the mic */
+        _frameSize = (UInt32)[userDefaults integerForKey:@"kBufferSize"];
+        _audioController = [[AudioController alloc] init:44100 FrameSize:_frameSize];
+        _bufferManager = [_audioController getBufferManagerInstance];
+        _l_fftData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _l_cepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _l_fftcepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
+        _Hz120 = floor(120*(float)_frameSize/(float)44100);
+        _Hz530 = floor(530*(float)_frameSize/(float)44100);
+        /* Turn on the microphone */
+        [_audioController startIOUnit];
         
         /* Initialise Score Notes */
         score[0] = [[Note alloc] initWithPitch:@"F3" AndTempoRate:tempoRate AndDuration:@"quarter" AndPlayDemo:YES];
@@ -329,13 +335,13 @@
     if ([fileName isEqualToString:@"F3_4"])           { [audioPlayer[0] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[0] play]; }
     else if ([fileName isEqualToString:@"G3_4"])      { [audioPlayer[1] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[1] play]; }
     else if ([fileName isEqualToString:@"A3_4"])      { [audioPlayer[2] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[2] play]; }
-    else if ([fileName isEqualToString:@"A#3_4"])      { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
+    else if ([fileName isEqualToString:@"A#3_4"])     { [audioPlayer[3] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[3] play]; }
     else if ([fileName isEqualToString:@"C4_4"])      { [audioPlayer[4] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[4] play]; }
     else if ([fileName isEqualToString:@"D4_4"])      { [audioPlayer[5] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[5] play]; }
     else if ([fileName isEqualToString:@"E4_4"])      { [audioPlayer[6] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[6] play]; }
     else if ([fileName isEqualToString:@"F4_4"])      { [audioPlayer[7] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[7] play]; }
-    else if ([fileName isEqualToString:@"ready"])     { [audioPlayer[8] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[8] play]; }
-    else if ([fileName isEqualToString:@"go"])        { [audioPlayer[9] seekToTime:CMTimeMake(0, 1)]; [audioPlayer[9] play]; }
+    else if ([fileName isEqualToString:@"ready"])     { [audioPlayer[8] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[8] play]; }
+    else if ([fileName isEqualToString:@"go"])        { [audioPlayer[9] seekToTime:CMTimeMake(0, 1)];  [audioPlayer[9] play]; }
 }
 
 -(void)playNote:(Note *)note isLastNote:(bool)isLastNote;
@@ -484,7 +490,10 @@
             indicator.hidden = YES;
             
             /* stop the mic */
-            [pitchDetector TurnOffMicrophone];
+            //[pitchDetector TurnOffMicrophone];
+            [_audioController stopIOUnit];
+            _audioController = NULL;
+            _bufferManager = NULL;
             
             TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
             [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
@@ -648,6 +657,37 @@
         [self playSound:tmp];
     }
     /* ------------------------------------------ Play Demo ------------------------------------------ End */
+    
+    /* ------------------------------------------ Estimate your Pitch ------------------------------------------ Begin */
+    if (_bufferManager != NULL)
+    {
+        if(_bufferManager->HasNewFFTData())
+        {
+            [_audioController GetFFTOutput:_l_fftData];
+            _bufferManager->GetCepstrumOutput(_l_fftData, _l_cepstrumData);
+            _bufferManager->GetFFTCepstrumOutput(_l_fftData, _l_cepstrumData, _l_fftcepstrumData);
+            
+            _maxAmp = -INFINITY;
+            _bin = _Hz120;
+            for (int i=_Hz120; i<=_Hz530; i++)
+            {
+                _curAmp = _l_fftcepstrumData[i];
+                if (_curAmp > _maxAmp)
+                {
+                    _maxAmp = _curAmp;
+                    _bin = i;
+                }
+            }
+            
+            _frequency = _bin*((float)44100/(float)_frameSize);
+            _midiNum = [_audioController freqToMIDI:_frequency];
+            _pitch = [_audioController midiToPitch:_midiNum];
+            //NSLog(@"Current: %.12f %d %.12f %@", _frequency, _bin, _midiNum, _pitch);
+            
+            [self moveIndicatorByMIDI:(int)round((double)_midiNum)];
+        }
+    }
+    /* ------------------------------------------ Estimate your Pitch ------------------------------------------ End */
     
     /* ------------------------------------------ Calculate your Score ------------------------------------------ Begin */
     for (int i=16; i<32; i++)
