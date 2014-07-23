@@ -24,9 +24,17 @@
     
     UInt32                      _sampleRate;
     UInt32                      _framesSize;
+    Float32                     _Overlap;
     
-    UInt32                      _Hz120;
-    UInt32                      _Hz530;
+    Float32                     _frequency;
+    Float32                     _midiNum;
+    NSString*                   _pitch;
+    
+    NSTimer*                    _pitchEstimatedScheduler;
+    
+    UInt32                      _Hz120;      // G2
+    UInt32                      _Hz530;      // C5
+    UInt32                      _Hz1100;     // C6
     
     NSString*                   _FileNameWave;
     NSString*                   _FileNameFFT;
@@ -37,10 +45,13 @@
 }
 
 /* -----------------------------Public Methods--------------------------------- Begin */
-- (id)init:(UInt32)NewSampleRate FrameSize:(UInt32)NewFrameSize;
+- (id)init:(UInt32)NewSampleRate FrameSize:(UInt32)NewFrameSize OverLap:(Float32)NewOverlap;
 - (OSStatus)startIOUnit;
 - (OSStatus)stopIOUnit;
-- (int)EstimatePitch:(Float32*)AudioInData;
+- (void)EstimatePitch;
+- (Float32)CurrentFreq;
+- (Float32)CurrentMIDI;
+- (NSString*)CurrentPitch;
 /* -----------------------------Public Methods--------------------------------- End */
 
 /* -----------------------------Private Methods--------------------------------- Begin */

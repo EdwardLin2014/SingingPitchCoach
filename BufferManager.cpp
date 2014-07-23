@@ -9,144 +9,134 @@
 
 #define min(x,y) (x < y) ? x : y
 
-BufferManager::BufferManager( UInt32 _framesSize ) :
-_WaveBuffers(),
-_WaveBufferIndex(0),
-_WaveBufferLen(_framesSize),
-_FFTBuffers(),
-_FFTBufferIndex(0),
-_FFTBufferLen(_framesSize),
-_FFTInputBuffer(NULL),
-_FFTInputBufferFrameIndex(0),
-_FFTInputBufferLen(_framesSize),
-_IsBackupEmpty(true),
-_HasNewFFTData(0),
-_NeedsNewFFTData(0),
-_WaveFFTCepstrumHelper(NULL)
+BufferManager::BufferManager( UInt32  NewFramesSize, UInt32  NewSamplingRate, Float32 NewOverlap )
 {
-    for(UInt32 i=0; i<kNumDrawBuffers; ++i)
-    {
-        _WaveBuffers[i] = (Float32*) calloc(_framesSize, sizeof(Float32));
-        _FFTBuffers[i] = (Float32*) calloc(_framesSize, sizeof(Float32));
-    }
+    _FrameSize = NewFramesSize;
+    _SamplingRate = NewSamplingRate;
+    _BufferLen = _SamplingRate * 5;         // Store 5 seconds audio data
+    _CurDataIdx = 0;
+    _FFTStartIdx = 0;
+    _FFTEndIdx = NewFramesSize-1;
+    _Overlap = NewOverlap;
+    _AudioDataBuffer = (Float32*) calloc(_BufferLen, sizeof(Float32));
+    _WaveFFTCepstrumHelper = new WaveFFTCepstrumHelper(_FrameSize);
     
-    _FFTInputBuffer = (Float32*) calloc(_framesSize, sizeof(Float32));
-    _FFTInputBuffer_Backup = (Float32*) calloc(_framesSize, sizeof(Float32));
-    _WaveFFTCepstrumHelper = new WaveFFTCepstrumHelper(_framesSize);
+    _HasNewFFTData = 0;
+    _NeedsNewFFTData = 0;
     OSAtomicIncrement32Barrier(&_NeedsNewFFTData);
 }
 BufferManager::~BufferManager()
 {
-    for(UInt32 i=0; i<kNumDrawBuffers; ++i)
-    {
-        free(_WaveBuffers[i]);
-        _WaveBuffers[i] = NULL;
-        
-        free(_FFTBuffers[i]);
-        _FFTBuffers[i] = NULL;
-    }
+    free(_AudioDataBuffer);
+    _AudioDataBuffer = NULL;
     
-    free(_FFTInputBuffer);
     delete _WaveFFTCepstrumHelper;
     _WaveFFTCepstrumHelper = NULL;
 }
 
-
-void BufferManager::CopyAudioDataToWaveBuffer( Float32* inData, UInt32 NewNumFrames )
+void BufferManager::CopyAudioDataToBuffer( Float32* inData, UInt32 NewNumSamples )
 {
     if (inData == NULL) return;
     
-    for (UInt32 i=0; i<NewNumFrames; i++)
+    for (UInt32 i=0; i<NewNumSamples; i++)
     {
-        if ((i+_WaveBufferIndex) >= _WaveBufferLen)
+        if (i + _CurDataIdx >= _BufferLen)
+            _CurDataIdx = -i;
+        
+        _AudioDataBuffer[i + _CurDataIdx] = inData[i];
+    }
+    _CurDataIdx += NewNumSamples;
+    
+    // The following segment of codes assume that GetFFTOuput() is being continuously called!
+    if (_FFTStartIdx < _FFTEndIdx)
+    {
+        if (_FFTEndIdx < _CurDataIdx && NeedsNewFFTData())
         {
-            CycleWaveBuffers();
-            _WaveBufferIndex = -i;
+            //printf("_CurDataIdx: %ld\n", _CurDataIdx);
+            
+            OSAtomicIncrement32(&_HasNewFFTData);
+            OSAtomicDecrement32(&_NeedsNewFFTData);
         }
-        _WaveBuffers[0][i + _WaveBufferIndex] = inData[i];
     }
-    _WaveBufferIndex += NewNumFrames;
-}
-void BufferManager::CycleWaveBuffers()
-{
-    // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
-	for (int i=(kNumDrawBuffers - 2); i>=0; i--)
-		memmove(_WaveBuffers[i + 1], _WaveBuffers[i], _WaveBufferLen);
+    else if (_FFTEndIdx < _FFTStartIdx)
+    {
+        if (_FFTEndIdx < _CurDataIdx && _CurDataIdx < _FFTStartIdx && NeedsNewFFTData())
+        {
+            //printf("_CurDataIdx: %ld\n", _CurDataIdx);
+            
+            OSAtomicIncrement32(&_HasNewFFTData);
+            OSAtomicDecrement32(&_NeedsNewFFTData);
+        }
+    }
+    else
+        printf("BufferManager::CopyAudioDataToBuffer() - this code should never execute!");
 }
 
+Float32* BufferManager::GetFFTBuffers()
+{
+    Float32* _FFTBuffer = (Float32*) calloc(_FrameSize, sizeof(Float32));
+    
+    if (_FFTStartIdx < _FFTEndIdx)
+    {
+        if (_FFTEndIdx < _CurDataIdx && HasNewFFTData())
+        {
+            for (UInt32 i=0; i<_FrameSize; i++)
+                _FFTBuffer[i] = _AudioDataBuffer[_FFTStartIdx+i];
+        }
+    }
+    else if (_FFTEndIdx < _FFTStartIdx)
+    {
+        if (_FFTEndIdx < _CurDataIdx && _CurDataIdx < _FFTStartIdx && HasNewFFTData())
+        {
+            UInt32 i, k=0;
+            for (i=_FFTStartIdx; i<_BufferLen; i++, k++)
+                _FFTBuffer[k] = _AudioDataBuffer[i];
+            for (i=0; i<=_FFTEndIdx; i++, k++)
+                _FFTBuffer[k] = _AudioDataBuffer[i];
+        }
+    }
+    else
+        printf("BufferManager::GetFFTBuffers() - this code should never execute!");
+    
+    return _FFTBuffer;
+}
 
-void BufferManager::CopyAudioDataToFFTInputBuffer( Float32* inData, UInt32 NewNumFrames )
-{
-    UInt32 framesToCopy = min(NewNumFrames, _FFTInputBufferLen - _FFTInputBufferFrameIndex);
-    
-    //memcpy(_FFTInputBuffer + _FFTInputBufferFrameIndex, inData, framesToCopy * sizeof(Float32));
-    //_FFTInputBufferFrameIndex += framesToCopy * sizeof(Float32);
-    
-    memcpy(_FFTInputBuffer + _FFTInputBufferFrameIndex, inData, framesToCopy);
-    _FFTInputBufferFrameIndex += framesToCopy;
-    
-    if (_FFTInputBufferFrameIndex >= _FFTInputBufferLen)
-    {
-        OSAtomicIncrement32(&_HasNewFFTData);
-        OSAtomicDecrement32(&_NeedsNewFFTData);
-    }
-}
-void BufferManager::CopyAudioDataToFFTInputBufferVer2( Float32* inData, UInt32 NewNumFrames )
-{
-    UInt32 i=0;
-    
-    // If there is previous remaining data, add them to FFTInputBuffer first
-    if (!_IsBackupEmpty)
-    {
-        for (i=0; i<_FFTInputBufferFrameIndex; i++)
-            _FFTInputBuffer[i] = _FFTInputBuffer_Backup[i];
-        
-        _IsBackupEmpty = true;
-    }
-    
-    UInt32 remainData = _FFTInputBufferLen - _FFTInputBufferFrameIndex;
-    UInt32 framesToCopy = min(NewNumFrames, _FFTInputBufferLen - _FFTInputBufferFrameIndex);
-    
-    for (i=0; i<framesToCopy; i++)
-        _FFTInputBuffer[i+_FFTInputBufferFrameIndex] = inData[i];
-    _FFTInputBufferFrameIndex += framesToCopy;
-    
-    if (_FFTInputBufferFrameIndex >= _FFTInputBufferLen)
-    {
-        OSAtomicIncrement32(&_HasNewFFTData);
-        OSAtomicDecrement32(&_NeedsNewFFTData);
-    }
-    
-    // If there is any remaining data, then store them
-    if (remainData < NewNumFrames)
-    {
-        remainData = NewNumFrames - remainData;
-        
-        for (i=0; i<remainData; i++)
-            _FFTInputBuffer_Backup[i] = inData[framesToCopy+i];
-        
-        _FFTInputBufferFrameIndex = remainData;
-        _IsBackupEmpty = false;
-    }
-}
-void BufferManager::CycleFFTBuffers()
-{
-    // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
-	for (int i=(kNumDrawBuffers - 2); i>=0; i--)
-		memmove(_FFTBuffers[i + 1], _FFTBuffers[i], _FFTBufferLen);
-}
 void BufferManager::GetFFTOutput( Float32* outFFTData )
 {
-    _WaveFFTCepstrumHelper->ComputeABSFFT(_FFTInputBuffer, outFFTData);
-    _FFTInputBufferFrameIndex = 0;
-    
-    OSAtomicDecrement32Barrier(&_HasNewFFTData);
-    OSAtomicIncrement32Barrier(&_NeedsNewFFTData);
+    if (HasNewFFTData())
+    {
+        Float32* _FFTBuffer = GetFFTBuffers();
+        _WaveFFTCepstrumHelper->ComputeABSFFT(_FFTBuffer, outFFTData);
+        
+        ManageFFTBuffer();
+        
+        free(_FFTBuffer);
+        
+        OSAtomicDecrement32Barrier(&_HasNewFFTData);
+        OSAtomicIncrement32Barrier(&_NeedsNewFFTData);
+    }
 }
+
+void BufferManager::ManageFFTBuffer()
+{
+    UInt32 increment = floor((double)((Float32)_FrameSize*(Float32)(1-_Overlap)));
+    UInt32 tmpFFTStartIdx = _FFTStartIdx + increment;
+    UInt32 tmpFFTEndIdx = _FFTEndIdx + increment;
+    if ( tmpFFTStartIdx >= _BufferLen)
+        _FFTStartIdx = tmpFFTStartIdx - _BufferLen;
+    else
+        _FFTStartIdx = tmpFFTStartIdx;
+    if ( tmpFFTEndIdx >= _BufferLen)
+        _FFTEndIdx = tmpFFTEndIdx - _BufferLen;
+    else
+        _FFTEndIdx = tmpFFTEndIdx;
+}
+
 void BufferManager::GetCepstrumOutput ( Float32* inFFTData, Float32* outCepstrumData )
 {
     _WaveFFTCepstrumHelper->ComputeCepstrum(inFFTData, outCepstrumData);
 }
+
 void BufferManager::GetFFTCepstrumOutput ( Float32* inFFTData, Float32* inCepstrumData, Float32* inFFTCepstrumData )
 {
     _WaveFFTCepstrumHelper->ComputeFFTCepstrum(inFFTData, inCepstrumData, inFFTCepstrumData);

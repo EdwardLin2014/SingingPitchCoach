@@ -49,15 +49,7 @@
         animationSpeed = tempoRate*710.5/458;
         
         /* start the mic */
-        _frameSize = (UInt32)[userDefaults integerForKey:@"kBufferSize"];
-        _audioController = [[AudioController alloc] init:44100 FrameSize:_frameSize];
-        _bufferManager = [_audioController getBufferManagerInstance];
-        _l_fftData = (Float32*) calloc(_frameSize, sizeof(Float32));
-        _l_cepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
-        _l_fftcepstrumData = (Float32*) calloc(_frameSize, sizeof(Float32));
-        _Hz120 = floor(120*(float)_frameSize/(float)44100);
-        _Hz530 = floor(530*(float)_frameSize/(float)44100);
-        /* Turn on the microphone */
+        _audioController = [[AudioController alloc] init:44100 FrameSize:(UInt32)[userDefaults integerForKey:@"kBufferSize"] OverLap:(Float32)[userDefaults integerForKey:@"percentageOfOverlap"]];
         [_audioController startIOUnit];
         
         /* Initialise Score Notes */
@@ -249,8 +241,8 @@
     if (indicator.hidden)
         return;
     
-    SKAction *easeMove = [SKAction moveToY:[self midiToPosition:midi] duration:0.2f];
-    easeMove.timingMode = SKActionTimingEaseInEaseOut;
+    SKAction *easeMove = [SKAction moveToY:[self midiToPosition:midi] duration:0.1f];
+    easeMove.timingMode = SKActionTimingLinear;
     [indicator runAction:easeMove];
 }
 
@@ -474,7 +466,6 @@
             //[pitchDetector TurnOffMicrophone];
             [_audioController stopIOUnit];
             _audioController = NULL;
-            _bufferManager = NULL;
             
             TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
             [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
@@ -640,34 +631,7 @@
     /* ------------------------------------------ Play Demo ------------------------------------------ End */
     
     /* ------------------------------------------ Estimate your Pitch ------------------------------------------ Begin */
-    if (_bufferManager != NULL)
-    {
-        if(_bufferManager->HasNewFFTData())
-        {
-            [_audioController GetFFTOutput:_l_fftData];
-            _bufferManager->GetCepstrumOutput(_l_fftData, _l_cepstrumData);
-            _bufferManager->GetFFTCepstrumOutput(_l_fftData, _l_cepstrumData, _l_fftcepstrumData);
-            
-            _maxAmp = -INFINITY;
-            _bin = _Hz120;
-            for (int i=_Hz120; i<=_Hz530; i++)
-            {
-                _curAmp = _l_fftcepstrumData[i];
-                if (_curAmp > _maxAmp)
-                {
-                    _maxAmp = _curAmp;
-                    _bin = i;
-                }
-            }
-            
-            _frequency = _bin*((float)44100/(float)_frameSize);
-            _midiNum = [_audioController freqToMIDI:_frequency];
-            _pitch = [_audioController midiToPitch:_midiNum];
-            //NSLog(@"Current: %.12f %d %.12f %@", _frequency, _bin, _midiNum, _pitch);
-            
-            [self moveIndicatorByMIDI:(int)round((double)_midiNum)];
-        }
-    }
+    [self moveIndicatorByMIDI:(int)round((double)[_audioController CurrentMIDI])];
     /* ------------------------------------------ Estimate your Pitch ------------------------------------------ End */
     
     /* ------------------------------------------ Calculate your Score ------------------------------------------ Begin */

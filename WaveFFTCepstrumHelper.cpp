@@ -32,7 +32,7 @@ WaveFFTCepstrumHelper::~WaveFFTCepstrumHelper()
     vDSP_destroy_fftsetup(_SpectrumAnalysis);
     free (_DspSplitComplex.realp);
     free (_DspSplitComplex.imagp);
-
+    
     free (_DspVector);
     free (_logFFT);
     free (_logCep);
@@ -46,18 +46,24 @@ void WaveFFTCepstrumHelper::ComputeABSFFT(Float32* inData, Float32* outFFTData)
 {
 	if (inData == NULL || outFFTData == NULL) return;
     
-//    for (UInt32 i=0; i<_FrameSize; i++)
-//        printf("inData[%ld]: %.12f\n", i, inData[i]);
+    //    for (UInt32 i=0; i<_FrameSize; i++)
+    //        printf("inData[%ld]: %.12f\n", i, inData[i]);
     
     //Generate a split complex vector from the real data
     vDSP_ctoz((COMPLEX *)inData, 2, &_DspSplitComplex, 1, _FFTLength);
     
     //Take the fft and scale appropriately
     vDSP_fft_zrip(_SpectrumAnalysis, &_DspSplitComplex, 1, _Log2N, kFFTDirection_Forward);
-
+    
     // Scale the fft result by 0.5
-    _midReal = _DspSplitComplex.realp[_FFTLength];
-    _midImag = _DspSplitComplex.imagp[_FFTLength];
+    if (_DspSplitComplex.realp + _FFTLength != NULL)
+        _midReal = _DspSplitComplex.realp[_FFTLength];
+    else
+        _midReal = 0;
+    if (_DspSplitComplex.imagp + _FFTLength != NULL)
+        _midImag = _DspSplitComplex.imagp[_FFTLength];
+    else
+        _midImag = 0;
     _midReal *= _FFTNormFactor;
     _midImag *= _FFTNormFactor;
     for (UInt32 i=0; i<_FFTLength; i++)
@@ -68,7 +74,7 @@ void WaveFFTCepstrumHelper::ComputeABSFFT(Float32* inData, Float32* outFFTData)
     
     //Zero out the nyquist value
     _DspSplitComplex.imagp[0] = 0.0;
-        
+    
     //Convert the fft result: abs(fft)
     vDSP_zvabs(&_DspSplitComplex, 1, outFFTData, 1, _FFTLength);
     
@@ -81,8 +87,8 @@ void WaveFFTCepstrumHelper::ComputeABSFFT(Float32* inData, Float32* outFFTData)
         outFFTData[_FFTLength] = kAdjust0DB;
     //------------------------------
     
-//    for (UInt32 i=0; i<_FrameSize; i++)
-//        printf("outFFTData[%ld]: %.12f\n", i, outFFTData[i]);
+    //    for (UInt32 i=0; i<_FrameSize; i++)
+    //        printf("outFFTData[%ld]: %.12f\n", i, outFFTData[i]);
     
     // Clear the temporary storage
     memset(_DspSplitComplex.realp, 0, _FFTLength*sizeof(Float32));

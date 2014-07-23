@@ -42,14 +42,7 @@
         /* Add background - End */
         
         /* start the mic */
-        _audioController = [[AudioController alloc] init:44100 FrameSize:4096];
-        _bufferManager = [_audioController getBufferManagerInstance];
-        _l_fftData = (Float32*) calloc(4096, sizeof(Float32));
-        _l_cepstrumData = (Float32*) calloc(4096, sizeof(Float32));
-        _l_fftcepstrumData = (Float32*) calloc(4096, sizeof(Float32));
-        _Hz120 = floor(120*(float)4096/(float)44100);
-        _Hz530 = floor(530*(float)4096/(float)44100);
-        /* Turn on the microphone */
+        _audioController = [[AudioController alloc] init:44100 FrameSize:4096 OverLap:0.5];
         [_audioController startIOUnit];
         
         /* Touch the Label to exit */
@@ -85,8 +78,6 @@
     /* stop the mic */
     //[pitchDetector TurnOffMicrophone];
     [_audioController stopIOUnit];
-    _audioController = NULL;
-    _bufferManager = NULL;
     
     TestingScene* home = [[TestingScene alloc] initWithSize:CGSizeMake(CGRectGetMaxX(self.frame), CGRectGetMaxY(self.frame))];
     [self.scene.view presentScene:home transition:[SKTransition doorsCloseHorizontalWithDuration:1.0]];
@@ -94,34 +85,7 @@
 
 -(void)update:(CFTimeInterval)currentTime
 {
-    if (_bufferManager != NULL)
-    {
-        if(_bufferManager->HasNewFFTData())
-        {
-            [_audioController GetFFTOutput:_l_fftData];
-            _bufferManager->GetCepstrumOutput(_l_fftData, _l_cepstrumData);
-            _bufferManager->GetFFTCepstrumOutput(_l_fftData, _l_cepstrumData, _l_fftcepstrumData);
-            
-            _maxAmp = -INFINITY;
-            _bin = _Hz120;
-            for (int i=_Hz120; i<=_Hz530; i++)
-            {
-                _curAmp = _l_fftcepstrumData[i];
-                if (_curAmp > _maxAmp)
-                {
-                    _maxAmp = _curAmp;
-                    _bin = i;
-                }
-            }
-            
-            _frequency = _bin*((float)44100/(float)4096);
-            _midiNum = [_audioController freqToMIDI:_frequency];
-            _pitch = [_audioController midiToPitch:_midiNum];
-            //NSLog(@"Current: %.12f %d %.12f %@", _frequency, _bin, _midiNum, _pitch);
-            
-            [self moveIndicatorByMIDI:(int)round((double)_midiNum)];
-        }
-    }
+    [self moveIndicatorByMIDI:(int)round((double)[_audioController CurrentMIDI])];
 }
 
 -(int)midiToPosition:(int)midi
@@ -165,8 +129,8 @@
     if (indicator.hidden)
         return;
     
-    SKAction *easeMove = [SKAction moveToY:[self midiToPosition:midi] duration:0.2f];
-    easeMove.timingMode = SKActionTimingEaseInEaseOut;
+    SKAction *easeMove = [SKAction moveToY:[self midiToPosition:midi] duration:0.1f];
+    easeMove.timingMode = SKActionTimingLinear;
     [indicator runAction:easeMove];
 }
 

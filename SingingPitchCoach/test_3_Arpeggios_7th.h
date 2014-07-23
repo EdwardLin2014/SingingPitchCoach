@@ -42,20 +42,7 @@
 @interface test_3_Arpeggios_7th : SKScene
 {
     AudioController*    _audioController;
-    BufferManager*      _bufferManager;
-    Float32*            _l_fftData;
-    Float32*            _l_cepstrumData;
-    Float32*            _l_fftcepstrumData;
-    UInt32              _Hz120;
-    UInt32              _Hz530;
-    Float32             _maxAmp;
-    int                 _bin;
-    Float32             _curAmp;
-    Float32             _frequency;
-    Float32             _midiNum;
-    NSString*           _pitch;
-    UInt32              _frameSize;
-
+    
     SKSpriteNode *indicator;
     SKSpriteNode* scoreLine;
     
