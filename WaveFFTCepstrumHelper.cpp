@@ -24,7 +24,6 @@ _FrameSize(_framesSize)
     _SpectrumAnalysis = vDSP_create_fftsetup(_Log2N, kFFTRadix2);
     
     _DspVector = (Float32*) calloc(_framesSize, sizeof(Float32));
-    _logFFT = (Float32*) calloc(_framesSize, sizeof(Float32));
     _logCep = (Float32*) calloc(_framesSize, sizeof(Float32));
 }
 WaveFFTCepstrumHelper::~WaveFFTCepstrumHelper()
@@ -34,7 +33,6 @@ WaveFFTCepstrumHelper::~WaveFFTCepstrumHelper()
     free (_DspSplitComplex.imagp);
     
     free (_DspVector);
-    free (_logFFT);
     free (_logCep);
 }
 
@@ -56,16 +54,6 @@ void WaveFFTCepstrumHelper::ComputeABSFFT(Float32* inData, Float32* outFFTData)
     vDSP_fft_zrip(_SpectrumAnalysis, &_DspSplitComplex, 1, _Log2N, kFFTDirection_Forward);
     
     // Scale the fft result by 0.5
-    if (_DspSplitComplex.realp + _FFTLength != NULL)
-        _midReal = _DspSplitComplex.realp[_FFTLength];
-    else
-        _midReal = 0;
-    if (_DspSplitComplex.imagp + _FFTLength != NULL)
-        _midImag = _DspSplitComplex.imagp[_FFTLength];
-    else
-        _midImag = 0;
-    _midReal *= _FFTNormFactor;
-    _midImag *= _FFTNormFactor;
     for (UInt32 i=0; i<_FFTLength; i++)
     {
         _DspSplitComplex.realp[i] *= _FFTNormFactor;
@@ -81,10 +69,7 @@ void WaveFFTCepstrumHelper::ComputeABSFFT(Float32* inData, Float32* outFFTData)
     //Mirror the first half result
     for (UInt32 i=0; i<_FFTLength-1; i++)
         outFFTData[_FrameSize-1-i] = outFFTData[i+1];
-    outFFTData[_FFTLength] = sqrtf((_midReal*_midReal) + (_midImag*_midImag));
-    // FIXME: Should we do this?----
-    if (outFFTData[_FFTLength]==0)
-        outFFTData[_FFTLength] = kAdjust0DB;
+    outFFTData[_FFTLength] = kAdjust0DB;
     //------------------------------
     
     //    for (UInt32 i=0; i<_FrameSize; i++)
@@ -117,19 +102,11 @@ void WaveFFTCepstrumHelper::ComputeFFTCepstrum ( Float32* inFFTData, Float32* in
 {
     // Suggest by Simon's PhD Thesis - Take a log of FFT and Cepstrum to sharpen its peak
     for (UInt32 i=0; i<_FrameSize; i++)
-    {
-        _logFFT[i] = logf(inFFTData[i]);
         _logCep[i] = logf(inCepstrumData[i]);
-    }
     
     for (UInt32 i=0; i<_FrameSize; i++)
-    {
         inFFTCepstrumData[i] = inFFTData[i]*_logCep[i];
-        //inFFTCepstrumData[i] = _logFFT[i]*_logCep[i];
-        //inFFTCepstrumData[i] = inFFTData[i]*inCepstrumData[i];
-    }
     
     // Clear the temporary storage
-    memset(_logFFT, 0, _FrameSize*sizeof(Float32));
     memset(_logCep, 0, _FrameSize*sizeof(Float32));
 }

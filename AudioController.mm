@@ -13,11 +13,6 @@ struct CallbackData {
     DCRejectionFilter*                    dcRejectionFilter;
     BOOL*                                 muteAudio;
     BOOL*                                 audioChainIsBeingReconstructed;
-    AudioFileID                           WaveFile;
-    AudioFileID                           FFTFile;
-    SInt64                                currentFramesWave;
-    SInt64                                currentFramesFFT;
-    BOOL*                                 isRecording;
     
     CallbackData(): rioUnit(NULL), bufferManager(NULL), muteAudio(NULL), audioChainIsBeingReconstructed(NULL) {}
 } cd;
@@ -42,30 +37,6 @@ static OSStatus	performRender (void                         *inRefCon,
         
         // fill up the audioDataBuffer
         cd.bufferManager->CopyAudioDataToBuffer((Float32*)ioData->mBuffers[0].mData, inNumberFrames);
-        
-        /*
-         // fill up the buffer for Audio Wave
-         cd.bufferManager->CopyAudioDataToWaveBuffer((Float32*)ioData->mBuffers[0].mData, inNumberFrames);
-         
-         // fill up the buffer for FFT
-         if (cd.bufferManager->NeedsNewFFTData())
-         {
-         //cd.bufferManager->CopyAudioDataToFFTInputBuffer((Float32*)ioData->mBuffers[0].mData, inNumberFrames);
-         cd.bufferManager->CopyAudioDataToFFTInputBufferVer2((Float32*)ioData->mBuffers[0].mData, inNumberFrames);
-         }
-         
-         // Do the recording if needed
-         if (cd.isRecording)
-         {
-         if (inNumberFrames > 0)
-         {
-         // write packets to file
-         err = AudioFileWritePackets(cd.WaveFile, FALSE, inNumberFrames, NULL, cd.currentFramesWave, &inNumberFrames, ioData->mBuffers[0].mData);
-         cd.currentFramesWave += inNumberFrames;
-         //NSLog(@"cd.currentFramesWave: %lld", cd.currentFramesWave);
-         }
-         }
-         */
         
         // mute audio if needed....mute the echo?
         for (UInt32 i=0; i<ioData->mNumberBuffers; ++i)
@@ -98,10 +69,6 @@ static OSStatus	performRender (void                         *inRefCon,
         _Hz120 = floor(120*(float)_framesSize/(float)_sampleRate);
         _Hz530 = floor(530*(float)_framesSize/(float)_sampleRate);
         _Hz1100 = floor(1100*(float)_framesSize/(float)_sampleRate);
-        
-        _isRecording = NO;
-        _FileNameWave = @"audioWave.wav";
-        _FileNameFFT = @"audioFFT.wav";
         
         [self setupAudioChain];
     }
@@ -393,85 +360,6 @@ static OSStatus	performRender (void                         *inRefCon,
     _audioChainIsBeingReconstructed = NO;
 }
 
-- (BufferManager*)getBufferManagerInstance
-{
-    return _bufferManager;
-}
-- (UInt32)getFrameSize
-{
-    return _framesSize;
-}
-- (double)sessionSampleRate
-{
-    return [[AVAudioSession sharedInstance] sampleRate];
-}
-- (BOOL)audioChainIsBeingReconstructed
-{
-    return _audioChainIsBeingReconstructed;
-}
-
-- (void)startRecording
-{
-    if(!_isRecording)
-    {
-        // create the audio file
-        NSString *filePathWave = [NSHomeDirectory() stringByAppendingPathComponent: _FileNameWave];
-        NSString *filePathFFT = [NSHomeDirectory() stringByAppendingPathComponent: _FileNameFFT];
-        
-        CFURLRef urlWave = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)filePathWave, kCFURLPOSIXPathStyle, false);
-        CFURLRef urlFFT = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)filePathFFT, kCFURLPOSIXPathStyle, false);
-        NSLog(@"Start Recording");
-        NSLog(@"Wave at: %@", urlWave);
-        NSLog(@"FFT at: %@", urlFFT);
-        XThrowIfError(AudioFileCreateWithURL(urlWave, kAudioFileWAVEType, &_ioFormat, kAudioFileFlags_EraseFile, &_WaveFile), "AudioFileCreateWithURL failed");
-        XThrowIfError(AudioFileCreateWithURL(urlFFT, kAudioFileWAVEType, &_ioFormat, kAudioFileFlags_EraseFile, &_FFTFile), "AudioFileCreateWithURL failed");
-        CFRelease(urlWave);
-        CFRelease(urlFFT);
-        
-        cd.WaveFile = _WaveFile;
-        cd.FFTFile = _FFTFile;
-        cd.currentFramesWave = 0;
-        cd.currentFramesFFT = 0;
-        _isRecording = YES;
-        cd.isRecording = &_isRecording;
-    }
-}
-- (void)stopRecording
-{
-    if(_isRecording)
-    {
-        NSLog(@"Stop Recording");
-        
-        _isRecording = NO;
-        cd.isRecording = &_isRecording;
-    }
-}
-- (BOOL)isRecording
-{
-    return _isRecording;
-}
-- (void)GetFFTOutput:(Float32*)outFFTData
-{
-    // Do the recording if needed
-    if (_isRecording==YES && _bufferManager->HasNewFFTData())
-    {
-        const void* fftData = _bufferManager->GetFFTBuffers();
-        
-        // write packets to file
-        UInt32 inNumberFrames = _framesSize;
-        XThrowIfError(AudioFileWritePackets(cd.FFTFile, FALSE, _framesSize, NULL, cd.currentFramesFFT, &inNumberFrames, fftData), "Cannot write data to FFTfile?");
-        cd.currentFramesFFT += inNumberFrames;
-        //NSLog(@"cd.currentFramesFFT: %lld", cd.currentFramesFFT);
-    }
-    else if(_isRecording==NO && cd.currentFramesFFT>0)
-    {
-        AudioFileClose(_WaveFile);
-        AudioFileClose(_FFTFile);
-    }
-    
-    _bufferManager->GetFFTOutput(outFFTData);
-}
-
 - (Float32)freqToMIDI:(Float32)frequency
 {
     if (frequency <=0)
@@ -508,6 +396,23 @@ static OSStatus	performRender (void                         *inRefCon,
         retval = [retval stringByAppendingString:@"8"];
     
     return retval;
+}
+
+- (UInt32)getFrameSize
+{
+    return _framesSize;
+}
+- (double)sessionSampleRate
+{
+    return [[AVAudioSession sharedInstance] sampleRate];
+}
+- (BOOL)audioChainIsBeingReconstructed
+{
+    return _audioChainIsBeingReconstructed;
+}
+- (void)GetFFTOutput:(Float32*)outFFTData
+{
+    _bufferManager->GetFFTOutput(outFFTData);
 }
 /* -----------------------------Private Methods--------------------------------- Begin */
 

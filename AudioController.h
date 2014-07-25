@@ -35,12 +35,7 @@
     UInt32                      _Hz120;      // G2
     UInt32                      _Hz530;      // C5
     UInt32                      _Hz1100;     // C6
-    
-    NSString*                   _FileNameWave;
-    NSString*                   _FileNameFFT;
-    AudioFileID                 _WaveFile;
-    AudioFileID                 _FFTFile;
-    BOOL                        _isRecording;   //FIXME: semaphore?
+
     CAStreamBasicDescription    _ioFormat;
 }
 
@@ -66,15 +61,9 @@
 - (Float32)freqToMIDI:(Float32)frequency;
 - (NSString*)midiToPitch:(Float32)midiNote;
 
-// Obsolete Functions or Functions which need improvement
-- (BufferManager*)getBufferManagerInstance;
 - (UInt32)getFrameSize;
 - (double)sessionSampleRate;
 - (BOOL)audioChainIsBeingReconstructed;
-
-- (void)startRecording;
-- (void)stopRecording;
-- (BOOL)isRecording;
 - (void)GetFFTOutput:(Float32*)outFFTData;
 /* -----------------------------Private Methods--------------------------------- Begin */
 
