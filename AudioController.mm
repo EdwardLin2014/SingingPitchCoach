@@ -101,7 +101,22 @@ static OSStatus	performRender (void                         *inRefCon,
         [_pitchEstimatedScheduler invalidate];
         _pitchEstimatedScheduler = NULL;
     }
-
+    
+    // Dispose the AURemoteIO instance
+    XThrowIfError(AudioComponentInstanceDispose(_rioUnit), "couldn't dispose nstance of AURemoteIO");
+    
+    // Remove previous handlers
+    AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVAudioSessionInterruptionNotification
+                                                  object:sessionInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVAudioSessionRouteChangeNotification
+                                                  object:sessionInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVAudioSessionMediaServicesWereResetNotification
+                                                  object:sessionInstance];
+    
     delete _bufferManager;  _bufferManager = NULL;
     delete _dcRejectionFilter; _dcRejectionFilter = NULL;
     
